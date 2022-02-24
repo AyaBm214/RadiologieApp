@@ -61,7 +61,6 @@ class AcceuilView extends GetView<AcceuilController> {
     @override
     Widget build(BuildContext context) {
     return Drawer(
-    child: Container(
     child: ListView(
     children: [
     buildDrawerHeader(),
@@ -102,7 +101,6 @@ class AcceuilView extends GetView<AcceuilController> {
         color: Colors.black38,
       ),
     ],
-    ),
     ),
     );
     }
