@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/webService.dart';
-import 'package:radiologiev2/app/modules/home/views/search_widget.dart';
 import 'package:radiologiev2/app/modules/login/views/login_view.dart';
 import 'package:radiologiev2/models/CliniqueModel.dart';
 import '../controllers/home_controller.dart';
@@ -12,7 +11,10 @@ class HomeView extends GetView<HomeController> {
   HomeController controller = Get.put(HomeController());
   final WebService cliniqueWebServices = WebService();
   late List<clinique> listClinique ;
-  String query = '';
+  bool isSearching= false;
+
+  HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +26,48 @@ class HomeView extends GetView<HomeController> {
         toolbarHeight: 70,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        title: Image.asset('assets/images/logo.png',width: 200,height: 500,),
+        title: Obx(
+              ()=>!controller.isSearching.value
+              ?
+          Image.asset('assets/images/logo.png',width: 200,height: 500,)
+              :
+          TextField(
+            onChanged: (value) => controller.searchClinique(value),
+            style: const TextStyle(color: Colors.black),
+            decoration: const InputDecoration(
+              icon: Icon(
+                Icons.search,
+                color: Color.fromRGBO(0, 147, 189,0.9), size: 30.0,
+              ),
+              hintText: "Chercher ton clinique",
+              hintStyle: TextStyle(color: Color.fromRGBO(0, 147, 189,0.9)),
+            ),
+          ),),
         centerTitle: true,
+        actions: [
+          Obx(
+                ()=>!controller.isSearching.value
+                ?
+            IconButton(
+                icon: const Icon(FontAwesomeIcons.search,
+                  color:Color.fromRGBO(0, 147, 189,0.9),
+                  size: 25.0,),
+                onPressed:(){
+                  controller.changeStatus(true);
+
+                })
+
+                :
+            IconButton(
+              icon: const Icon(Icons.cancel ,color: Color.fromRGBO(0, 147, 189,0.9), size: 30.0,),
+              onPressed: () {
+                controller.changeStatus(false);
+                controller.Cliniquetrouve.value= controller.listcliniques;
+              },
+            )
+            ,
+          ),
+        ],
       ),
 
     body: SingleChildScrollView(
@@ -33,13 +75,11 @@ class HomeView extends GetView<HomeController> {
           height: double.maxFinite,
           child: Column(
             children: [
-              buildSearch(),
               const Text("Liste des cliniques" ,
                 style: TextStyle(
                   height: 1,
                   fontWeight: FontWeight.normal,
                   fontSize: 25,
-
                   color: Color.fromRGBO(0, 147, 189,0.9),
 
                 ),
@@ -59,7 +99,7 @@ class HomeView extends GetView<HomeController> {
                       );
                     } else if (snapshot.connectionState ==
                         ConnectionState.done) {
-                      return buildList(controller.listcliniques);
+                      return buildList();
                     } else {
                       return const Center(
                         child: Center(child: CircularProgressIndicator()),
@@ -74,15 +114,17 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
-  Widget buildList(List<clinique> list) {
-    return ListView.builder(
+
+  Widget buildList() {
+    return Obx(
+            () => ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         physics: const ScrollPhysics(),
-        itemCount: list.length,
+        itemCount: controller.Cliniquetrouve.length,
         itemBuilder: (BuildContext context, int index){
           // ignore: unused_local_variable
-          clinique cliniques = list[index];
+          clinique cliniques = controller.Cliniquetrouve[index];
           return Card(
             child: Column(
               children: [
@@ -101,21 +143,7 @@ class HomeView extends GetView<HomeController> {
                 )],
             ),
           );
-        });
-  }
-  Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: 'Title of clinique',
-    onChanged: searchclinique,
-  );
-
-  void searchclinique(String query) {
-    setState(() {
-      this.query = query;
-      listClinique = listClinique;
-    });
+        }));
   }
 }
-  void setState(Null Function() param0) {
-  }
 
