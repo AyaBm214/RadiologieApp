@@ -8,52 +8,113 @@ import '../controllers/acceuil_controller.dart';
 import 'Center_items.dart';
 
 class AcceuilView extends GetView<AcceuilController> {
+  final dateController = TextEditingController();
+  final dateController2 = TextEditingController();
+
+   AcceuilView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-          drawer: const NavigationDrawer(),
-        appBar: AppBar(
-              centerTitle: true,
-              title: InkWell(
-                onTap: () {
-                  Get.defaultDialog(
-                    title: ('TOUS LES CENTRES'),
-                    content: GetBuilder<AcceuilController>(
-                      builder: (controller) {
-                        return SizedBox(
-                            height: 300.0,
-                            width: 300.0,
-                            child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: controller.CentervList.length,
-                            itemBuilder: (context, index) => CentersListItem(
-                              Center: controller.CentervList[index], Key: const {} ,
+    return Scaffold(
+      drawer: const NavigationDrawer(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: InkWell(
+            onTap: () {
+              Get.defaultDialog(
+                title: ('TOUS LES CENTRES'),
+                content: GetBuilder<AcceuilController>(
+                  builder: (controller) {
+                    return SizedBox(
+                      height: 300.0,
+                      width: 300.0,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: controller.CentervList.length,
+                        itemBuilder: (context, index) =>
+                            CentersListItem(
+                              Center: controller.CentervList[index],
+                              Key: const {},
                             ),
-                          ),
-                        );
-                      },
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+            child: RichText(
+              text: const TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Tous les Centres ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                  );
-                },
-                  child : RichText(
-                    text: const TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Tous les Centres ",
-                        ),
-                        WidgetSpan(
-                          child: Icon(Icons.business, size: 25 ),
-                        ),
-                      ],
-                    ),
-                  )
+                  ),
+                  WidgetSpan(
+                    child: Icon(Icons.business, size: 25),
+                  ),
+                ],
               ),
-            ),
-      );
+            )
+        ),
+      ),
+        body:  Row(
+            mainAxisAlignment : MainAxisAlignment.spaceBetween,
+            children: [
+             SizedBox(
+               width: 180,
+        child: Expanded(
+              child: TextField(
+                 readOnly: true,
+                 controller: dateController,
+                 decoration: InputDecoration(
+                   hintText: 'Pick your Date',
+                   contentPadding:  EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                   prefixIcon: Icon(Icons.calendar_today_outlined),
+                   border: OutlineInputBorder(
+                     borderRadius: BorderRadius.circular(32.0),
+                   ),
+                 ),
+                 onTap: () async {
+                   var date =  await showDatePicker(
+                       context: context,
+                       initialDate:DateTime.now(),
+                       firstDate:DateTime(1900),
+                       lastDate: DateTime(2100));
+                   dateController.text = date.toString().substring(0,10);
+                 },),
+             )),
+              SizedBox(
+                width: 180,
+              child: Expanded(
+                child: TextField(
+                  readOnly: true,
+                  controller: dateController2,
+                  decoration: InputDecoration(
+                    hintText: 'Pick your Date',
+                    contentPadding:  EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    prefixIcon: Icon(Icons.calendar_today_outlined),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                  ),
+                  onTap: () async {
+                    var date =  await showDatePicker(
+                        context: context,
+                        initialDate:DateTime.now(),
+                        firstDate:DateTime(1900),
+                        lastDate: DateTime(2100));
+                    dateController2.text = date.toString().substring(0,10);
+                  },),
+              )),
+            ],
+          ),
 
+    );
   }
 }
-    class NavigationDrawer extends StatelessWidget {
+  class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
 
   get myController => myController.dispose();
@@ -149,7 +210,7 @@ class AcceuilView extends GetView<AcceuilController> {
               ),
               const Align(
                 alignment: Alignment(.3, -.2),
-                child: Text('USER NAME',
+                child: Text( 'User'  ,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 23,
