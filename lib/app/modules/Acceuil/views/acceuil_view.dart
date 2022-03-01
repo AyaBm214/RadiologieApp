@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/modules/Acceuil/controllers/acceuil_controller.dart';
-
 import 'package:radiologiev2/app/routes/app_pages.dart';
 import '../controllers/acceuil_controller.dart';
 import 'Center_items.dart';
+import 'SearchPage.dart';
 
 class AcceuilView extends GetView<AcceuilController> {
   final dateController = TextEditingController();
@@ -40,6 +40,7 @@ class AcceuilView extends GetView<AcceuilController> {
                   },
                 ),
               );
+
             },
             child: RichText(
               text: const TextSpan(
@@ -56,24 +57,37 @@ class AcceuilView extends GetView<AcceuilController> {
                   ),
                 ],
               ),
+
             )
+
         ),
+        actions: [
+          // Navigate to the Search Screen
+          IconButton(
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => SearchPage())),
+              icon: Icon(Icons.search),
+              color: Colors.white,
+            iconSize: 36,
+          )
+
+        ],
       ),
         body:  Row(
-            mainAxisAlignment : MainAxisAlignment.spaceBetween,
-            children: [
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
              SizedBox(
-               width: 180,
-        child: Expanded(
+               width: 130,
+        child: SafeArea(
               child: TextField(
                  readOnly: true,
                  controller: dateController,
                  decoration: InputDecoration(
                    hintText: 'Pick your Date',
-                   contentPadding:  EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                   contentPadding:  const EdgeInsets.all(5),
                    prefixIcon: Icon(Icons.calendar_today_outlined),
                    border: OutlineInputBorder(
-                     borderRadius: BorderRadius.circular(32.0),
+                     borderRadius: BorderRadius.circular(20.0),
                    ),
                  ),
                  onTap: () async {
@@ -86,17 +100,18 @@ class AcceuilView extends GetView<AcceuilController> {
                  },),
              )),
               SizedBox(
-                width: 180,
-              child: Expanded(
+                width: 130,
+              child: SafeArea(
                 child: TextField(
+                  textAlign: TextAlign.center,
                   readOnly: true,
                   controller: dateController2,
                   decoration: InputDecoration(
                     hintText: 'Pick your Date',
-                    contentPadding:  EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                    contentPadding:  EdgeInsets.all(5),
                     prefixIcon: Icon(Icons.calendar_today_outlined),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0),
+                      borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
                   onTap: () async {
@@ -108,6 +123,18 @@ class AcceuilView extends GetView<AcceuilController> {
                     dateController2.text = date.toString().substring(0,10);
                   },),
               )),
+    SizedBox(
+    width: 120,
+    child: SafeArea(
+    child:IconButton(
+    icon: Icon(Icons.filter_alt_rounded),
+    color: Colors.red,
+        padding: EdgeInsets.only(right: 1, top:10),
+    highlightColor: Colors.white,
+    iconSize: 35,
+    onPressed: () {}
+    ),
+    ),),
             ],
           ),
 
@@ -173,7 +200,7 @@ class AcceuilView extends GetView<AcceuilController> {
           gradient: LinearGradient(
             colors: [
               Colors.blueAccent,
-              Colors.yellowAccent,
+              Colors.green,
             ],
           ),
         ),
@@ -184,11 +211,11 @@ class AcceuilView extends GetView<AcceuilController> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   height:
-                  constraints.maxHeight / 8, // half white on drawer
+                  constraints.maxHeight / 120, // half white on drawer
                     // change the colors you want
                     color:Colors.white60,
-
                 ),
+
               ),
               Align(
                 alignment: const Alignment(-.85, 0),
@@ -205,15 +232,6 @@ class AcceuilView extends GetView<AcceuilController> {
                   child: Icon(
                     Icons.person,
                     size: constraints.maxHeight / 2,
-                  ),
-                ),
-              ),
-              const Align(
-                alignment: Alignment(.3, -.2),
-                child: Text( 'User'  ,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 23,
                   ),
                 ),
               ),
