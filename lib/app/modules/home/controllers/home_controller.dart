@@ -1,6 +1,7 @@
 
 
 import 'package:get/get.dart';
+import 'package:radiologiev2/app/Configuration/config.dart';
 import 'package:radiologiev2/app/data/webService.dart';
 import 'package:radiologiev2/models/CliniqueModel.dart';
 
@@ -12,6 +13,7 @@ class HomeController extends GetxController {
   RxBool isLoaded = false.obs;
   RxBool isSearching= false.obs;
   RxString searchInput="".obs;
+  config configuration= config();
   final count = 0.obs;
 
   @override

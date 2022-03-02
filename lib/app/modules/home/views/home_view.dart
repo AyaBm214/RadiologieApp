@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/webService.dart';
 import 'package:radiologiev2/app/modules/login/views/login_view.dart';
@@ -21,7 +21,7 @@ class HomeView extends GetView<HomeController> {
       appBar: AppBar(
         leading: InkWell(
           onTap: ()=>controller.fetchClinique(),
-          child: const Icon(Icons.refresh_rounded, color: Colors.blue, size: 30.0,),
+          child: const Icon(Icons.refresh_rounded, color: Colors.blue, size: 20.0,),
         ),
         toolbarHeight: 70,
         automaticallyImplyLeading: false,
@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeController> {
                 ()=>!controller.isSearching.value
                 ?
             IconButton(
-                icon: const Icon(FontAwesomeIcons.search,
+                icon: const Icon(Icons.search,
                   color:Color.fromRGBO(0, 147, 189,0.9),
                   size: 25.0,),
                 onPressed:(){
@@ -71,19 +71,7 @@ class HomeView extends GetView<HomeController> {
       ),
 
     body: SingleChildScrollView(
-        child: SizedBox(
-          height: double.maxFinite,
-          child: Column(
-            children: [
-              const Text("Liste des cliniques" ,
-                style: TextStyle(
-                  height: 1,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 25,
-                  color: Color.fromRGBO(0, 147, 189,0.9),
-
-                ),
-              ),
+        child:
               FutureBuilder(
                   future: controller.fetchClinique(),
                   builder: (BuildContext context,  snapshot) {
@@ -105,16 +93,11 @@ class HomeView extends GetView<HomeController> {
                         child: Center(child: CircularProgressIndicator()),
                       );
                     }
-
                   }
               )
-            ],
-          ),
-        ),
       ),
     );
   }
-
   Widget buildList() {
     return Obx(
             () => ListView.builder(
@@ -130,9 +113,10 @@ class HomeView extends GetView<HomeController> {
               children: [
                 ListTile(
                   onTap: () {
-                    Get.to(LoginView(), arguments:cliniques.nom!);
+                    controller.configuration.NomCliniqueset=cliniques.nom!;
+                    Get.to(LoginView());
                   },
-            leading: const Icon(FontAwesomeIcons.hospital ,color: Color.fromRGBO(0, 147, 189,0.9),),
+            leading: const Icon(Icons.local_hospital ,color: Color.fromRGBO(0, 147, 189,0.9),),
             title: Center(child: Text(cliniques.nom.toString(), style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.normal,
