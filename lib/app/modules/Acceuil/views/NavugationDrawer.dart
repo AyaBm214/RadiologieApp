@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:radiologiev2/app/modules/Acceuil/Radio/views/radio_view.dart';
 import 'package:radiologiev2/app/modules/Acceuil/Rendezvous/views/rendezvous_view.dart';
+import 'package:radiologiev2/app/modules/Acceuil/radio/views/radio_view.dart';
 import 'package:radiologiev2/app/modules/home/controllers/home_controller.dart';
 import 'package:radiologiev2/app/modules/home/views/home_view.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,7 @@ class NavigationDrawer extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(homeController.configuration.getNomClinique),
+          accountName: Text('Admin'),
             currentAccountPicture: CircleAvatar(
               backgroundColor:
               Theme.of(context).platform == TargetPlatform.iOS
