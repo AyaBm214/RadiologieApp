@@ -11,6 +11,7 @@ abstract class Routes {
   static const RADIO = _Paths.ACCEUIL + _Paths.RADIO;
   static const RENDEZVOUS = _Paths.ACCEUIL + _Paths.RENDEZVOUS;
   static const DECONNEXION = _Paths.ACCEUIL + _Paths.DECONNEXION;
+  static const LIST_COMPTES_RENDUS = _Paths.LIST_COMPTES_RENDUS;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const RADIO = '/radio';
   static const RENDEZVOUS = '/rendezvous';
   static const DECONNEXION = '/deconnexion';
+  static const LIST_COMPTES_RENDUS = '/list-comptes-rendus';
 }

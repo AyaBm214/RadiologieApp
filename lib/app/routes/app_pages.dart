@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-import '../modules/Acceuil/Rendezvous/views/rendezvous_view.dart';
-import '../modules/Acceuil/radio/bindings/radio_binding.dart';
-import '../modules/Acceuil/radio/views/radio_view.dart';
-import '../modules/Acceuil/views/acceuil_view.dart';
+import '../modules/ListComptesRendus/bindings/list_comptes_rendus_binding.dart';
+import '../modules/ListComptesRendus/views/list_comptes_rendus_view.dart';
+import '../modules/Rendezvous/views/rendezvous_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/radio/views/radio_view.dart';
 import '../modules/splash/views/splash_view.dart';
 
 part 'app_routes.dart';
@@ -13,7 +13,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.ACCEUIL;
+  static const INITIAL = Routes.LIST_COMPTES_RENDUS;
 
   static final routes = [
     GetPage(
@@ -29,18 +29,17 @@ class AppPages {
       page: () => LoginView(),
     ),
     GetPage(
-      name: _Paths.ACCEUIL,
-      page: () => AcceuilView(),
+      name: _Paths.RADIO,
+      page: () => RadioView(),
     ),
-
-        GetPage(
-          name: _Paths.RADIO,
-          page: () => RadioView(),
-          binding: RadioBinding(),
-        ),
     GetPage(
       name: _Paths.RENDEZVOUS,
       page: () => RendezvousView(),
+    ),
+    GetPage(
+      name: _Paths.LIST_COMPTES_RENDUS,
+      page: () => ListComptesRendusView(),
+      binding: ListComptesRendusBinding(),
     ),
   ];
 }
