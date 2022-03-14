@@ -44,7 +44,7 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
                     dropdownSearchDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(8),
                       hintText: "Select Center",
-                      hintStyle: const TextStyle(color: Colors.black),
+                      hintStyle: const TextStyle(color: Colors.white),
                       prefixIcon: const Icon(Icons.business),
                       labelStyle: TextStyle(
                         color: Get.theme.primaryColor,

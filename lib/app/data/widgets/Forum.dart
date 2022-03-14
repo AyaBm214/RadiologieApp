@@ -37,7 +37,13 @@ class FormulaireView extends GetView<RendezvousController> {
             child: Column(
               children: <Widget>[
                 AppBar(
-                  leading: const Icon(Icons.calendar_today_outlined),
+                  leading: new IconButton(
+                      icon: new Icon(defaultLocale == "ar"
+                          ? Icons.arrow_forward_outlined
+                          : Icons.arrow_back_outlined),
+                      onPressed: () {
+                        backPressed();
+                      }),
                   elevation: 0,
                   title: const Text('Rendez Vous'),
                   actions: const <Widget>[],
@@ -371,6 +377,10 @@ class FormulaireView extends GetView<RendezvousController> {
         ),
       ),
     );
+  }
+
+  void backPressed() {
+    Get.toNamed(Routes.RENDEZVOUS);
   }
 }
 

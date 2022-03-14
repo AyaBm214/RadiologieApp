@@ -9,6 +9,8 @@ class LoginController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   ServiceUser apiService = ServiceUser();
+  RxBool viewPassWord = true.obs;
+  showPassword() => viewPassWord.value = !viewPassWord.value;
 
   String? validator(String? value) {
     if (value!.isEmpty) {

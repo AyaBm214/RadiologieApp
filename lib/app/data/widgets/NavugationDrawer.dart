@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radiologiev2/app/data/Services/ServiceUser.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/views/rendezvous_view.dart';
 import 'package:radiologiev2/app/modules/home/controllers/home_controller.dart';
 import 'package:radiologiev2/app/modules/home/views/home_view.dart';
@@ -9,6 +10,7 @@ class NavigationDrawer extends StatelessWidget {
   get myController => myController.dispose();
 
   HomeController homeController = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -20,9 +22,14 @@ class NavigationDrawer extends StatelessWidget {
               backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
                   ? Colors.blue
                   : Colors.white,
-              child: Text(
-                "A",
-                style: TextStyle(fontSize: 40.0),
+              child: RichText(
+                text: TextSpan(
+                  text: ServiceUser.username,
+                  style: TextStyle(
+                      color: const Color.fromRGBO(4, 116, 124, 1),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             accountEmail: null,
