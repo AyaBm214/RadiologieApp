@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:radiologiev2/app/data/models/Medcin.dart';
 
-class ServiceMedcin {
-  Future<List<Medecin>> fetchMedcin() async {
+class ServiceMedecin {
+  Future fetchMedcin() async {
     final response = await http
         .get(Uri.parse('http://192.168.1.242:9015/radiologie/api/medecins'));
     if (response.statusCode == 200) {
@@ -12,7 +12,7 @@ class ServiceMedcin {
       // then parse the JSON.
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       print(parsed);
-      return parsed.map<Medecin>((json) => Medecin.fromMap(json)).toList();
+      return MedecinFromJson(response.body);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.

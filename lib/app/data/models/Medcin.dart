@@ -4,8 +4,11 @@
 
 import 'dart:convert';
 
-List<Medecin> postFromJson(String str) =>
-    List<Medecin>.from(json.decode(str).map((x) => Medecin.fromMap(x)));
+List<Medecin> MedecinFromJson(String str) =>
+    List<Medecin>.from(json.decode(str).map((x) => Medecin.fromJson(x)));
+
+String OrganismeToJson(List<Medecin> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Medecin {
   Medecin({
@@ -23,7 +26,7 @@ class Medecin {
 
   String? codMed;
   dynamic nomMed;
-  dynamic typMed;
+  String? typMed;
   dynamic codSpe;
   dynamic adresse;
   dynamic cabinet;
@@ -32,7 +35,7 @@ class Medecin {
   dynamic telAut;
   dynamic medLecture;
 
-  factory Medecin.fromMap(Map<String, dynamic> json) => Medecin(
+  factory Medecin.fromJson(Map<String, dynamic> json) => Medecin(
         codMed: json["codMed"],
         nomMed: json["nomMed"],
         typMed: json["typMed"],
@@ -44,4 +47,16 @@ class Medecin {
         telAut: json["telAut"],
         medLecture: json["medLecture"],
       );
+  Map<String, dynamic> toJson() => {
+        "codMed": codMed,
+        "nomMed": nomMed,
+        "typMed": typMed,
+        "codSpe": codSpe,
+        "adresse": adresse,
+        "cabinet": cabinet,
+        "telDom": telDom,
+        "telBur": telBur,
+        "telAut": telAut,
+        "medLecture": medLecture,
+      };
 }

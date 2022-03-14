@@ -10,7 +10,7 @@ dependencies:
   syncfusion_flutter_calendar: ^19.1.54
   intl: ^0.17.0
   intl_phone_field: ^3.0.1
-  dropdown_formfield: ^0.1.4
+  dropdown_search: ^2.0.1
   get: ^4.6.1
   xml: ^5.3.1
   http: ^0.13.4

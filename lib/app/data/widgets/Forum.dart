@@ -1,531 +1,653 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
-import 'package:radiologiev2/app/data/Services/ServiceMedcin.dart';
 import 'package:radiologiev2/app/data/models/CenterModel.dart';
 import 'package:radiologiev2/app/data/models/Medcin.dart';
-import 'package:radiologiev2/app/data/widgets/DropDownOrganisme.dart';
+import 'package:radiologiev2/app/data/models/OrganismeModel.dart';
+import 'package:radiologiev2/app/modules/Rendezvous/controllers/rendezvous_controller.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/views/rendezvous_view.dart';
+import 'package:radiologiev2/app/routes/app_pages.dart';
 
-class RendezvousFrom extends StatefulWidget {
-  final state = _RendezvousFormState();
-
+class FormulaireView extends GetView<RendezvousController> {
   @override
-  // ignore: no_logic_in_create_state
-  _RendezvousFormState createState() => state;
-}
-
-class _RendezvousFormState extends State<RendezvousFrom> {
   final form = GlobalKey<FormState>();
+  final CenterController _CenterController = Get.put(CenterController());
+  final MedecinController _MedecinController = Get.put(MedecinController());
+  String? defaultLocale;
+
   final dateController = TextEditingController();
-  final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
   TextEditingController timeinput = TextEditingController();
-  var items = ['P'];
   var items2 = ['SALLE ECHO 1'];
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Material(
-        elevation: 1,
-        clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.circular(8),
-        child: Form(
-          key: form,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              AppBar(
-                leading: const Icon(Icons.calendar_today_outlined),
-                elevation: 0,
-                title: const Text('Rendez Vous'),
-                actions: const <Widget>[],
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                centerTitle: true,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 19),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  onTap: () {
-                    Get.defaultDialog(
-                      title: ('TOUS LES CENTRES'),
-                      content: buildlist(),
-                    );
-                  },
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: ' Center',
-                    hintText: 'Tap to choose',
-                    icon: Icon(Icons.business),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                        controller: _controller2,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: ' Salle',
-                          hintText: 'Tap to choose',
-                          icon: Icon(Icons.home_filled),
-                          isDense: true,
-                        ),
-                      ),
-                    ),
-                    PopupMenuButton<String>(
-                      icon: const Icon(Icons.arrow_drop_down),
-                      onSelected: (String value) {
-                        _controller2.text = value;
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return items2
-                            .map<PopupMenuItem<String>>((String value) {
-                          return PopupMenuItem(
-                              child: Text(value), value: value);
-                        }).toList();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 19),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  onTap: () {
-                    Get.defaultDialog(
-                      title: ('Les Medecins'),
-                      content: buildlist2(),
-                    );
-                  },
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: ' Medecin',
-                    hintText: 'Tap to choose',
-                    icon: Icon(Icons.person_add),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
-                        },
-                        controller: _controller,
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: ' Type Medecin',
-                          hintText: 'Tap to choose',
-                          icon: Icon(Icons.home_filled),
-                          isDense: true,
-                        ),
-                      ),
-                    ),
-                    PopupMenuButton<String>(
-                      icon: const Icon(Icons.arrow_drop_down),
-                      onSelected: (String value) {
-                        _controller.text = value;
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return items.map<PopupMenuItem<String>>((String value) {
-                          return PopupMenuItem(
-                              child: Text(value), value: value);
-                        }).toList();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 19),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Objet',
-                    hintText: 'type here',
-                    icon: Icon(Icons.emoji_objects),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 19),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  readOnly: true,
-                  controller: dateController,
-                  decoration: InputDecoration(
-                    hintText: 'Pick your Date',
-                    contentPadding: const EdgeInsets.all(5),
-                    prefixIcon: const Icon(Icons.calendar_today_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                  onTap: () async {
-                    var date = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100));
-                    dateController.text = date.toString().substring(0, 10);
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 19),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  controller: timeinput, //editing controller of this TextField
-                  decoration: const InputDecoration(
-                      icon: Icon(Icons.timer), //icon of text field
-                      labelText: "Enter Time" //label text of field
-                      ),
-                  readOnly:
-                      true, //set it true, so that user will not able to edit text
-                  onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      initialTime: TimeOfDay.now(),
-                      context: context,
-                    );
-                    if (pickedTime != null) {
-                      print(pickedTime.format(context)); //output 10:51 PM
-                      DateTime parsedTime = DateFormat.jm()
-                          .parse(pickedTime.format(context).toString());
-                      //converting to DateTime so that we can further format on different pattern.
-                      print(parsedTime); //output 1970-01-01 22:53:00.000
-                      String formattedTime =
-                          DateFormat('HH:mm:ss').format(parsedTime);
-                      print(formattedTime); //output 14:59:00
-                      //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                      setState(() {
-                        timeinput.text =
-                            formattedTime; //set the value of text field.
-                      });
-                    } else {
-                      print("Time is not selected");
-                    }
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserForm(),
-                          ));
-                    },
-                    label: const Text('Next'),
-                    icon: const Icon(Icons.arrow_right_alt),
-                    backgroundColor: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  ServiceCenter sc = ServiceCenter();
-  late Future<List<Centerv>> futureCenter;
-  Widget buildlist() {
-    futureCenter = sc.fetchCenter();
-    return FutureBuilder<List<Centerv>>(
-        future: futureCenter,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SizedBox(
-                height: 300.0, // Change as per your requirement
-                width: 300.0, // Change as per your requirement
-                child: ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        trailing: const Icon(Icons.login_rounded),
-                        title: Text(
-                          snapshot.data![index].designCentre!,
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    }));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
-  }
-
-  ServiceMedcin scm = ServiceMedcin();
-  Widget buildlist2() {
-    return FutureBuilder<List<Medecin>>(
-        future: scm.fetchMedcin(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SizedBox(
-                height: 300.0, // Change as per your requirement
-                width: 300.0, // Change as per your requirement
-                child: ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        trailing: const Icon(Icons.login_rounded),
-                        title: Text(
-                          snapshot.data![index].codMed!,
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    }));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
-  }
-}
-
-class UserForm extends StatefulWidget {
-  final state = _UserFormState();
-
-  @override
-  // ignore: no_logic_in_create_state
-  _UserFormState createState() => state;
-}
-
-class _UserFormState extends State<UserForm> {
-  final form = GlobalKey<FormState>();
-  final dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Material(
-        elevation: 1,
-        clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.circular(8),
+    return Scaffold(
+      body: SafeArea(
         child: Form(
           key: form,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              AppBar(
-                leading: GestureDetector(
-                  onTap: () {
-                    Get.to(RendezvousView());
-                  },
-                  child: Icon(Icons.backspace_outlined),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                AppBar(
+                  leading: const Icon(Icons.calendar_today_outlined),
+                  elevation: 0,
+                  title: const Text('Rendez Vous'),
+                  actions: const <Widget>[],
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  centerTitle: true,
                 ),
-                elevation: 0,
-                title: const Text('Info Patient'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: const Icon(Icons.check),
-                    textColor: Colors.white,
-                    onPressed: () {
-                      if (form.currentState!.validate()) {
-                        SnackBar(
-                          content: const Text('Rendez vous confirmée'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            onPressed: () {
-                              Get.to(RendezvousFrom());
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      child: Obx(
+                        () => DropdownSearch<String>(
+                            mode: Mode.BOTTOM_SHEET,
+                            showSearchBox: true,
+                            items: _CenterController.listCenter
+                                .map((element) => defaultLocale == "ar"
+                                    ? element.designCentre.toString()
+                                    : element.designCentre!.toString())
+                                .toList(),
+                            popupItemDisabled: (String s) => s.startsWith('I'),
+                            onChanged: (value) => {
+                                  _CenterController.listCenter.value
+                                      .forEach((element) {
+                                    if (element.designCentre == value) {
+                                      _CenterController.listCenter.value =
+                                          element as List<Centerv>;
+                                    }
+                                  }),
+                                },
+                            selectedItem:
+                                _CenterController.Lcenterv.value.designCentre,
+                            dropdownSearchDecoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                hintText: "Select Center",
+                                hintStyle:
+                                    const TextStyle(color: Colors.blueGrey),
+                                prefixIcon: const Icon(Icons.business_center),
+                                labelStyle: TextStyle(
+                                  color: Get.theme.primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(
+                                      color: Get.theme.primaryColor,
+                                      width: 1.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor,
+                                        width: 1.0)))),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
                             },
-                          ),
-                        );
-                        Get.to(RendezvousView());
-                      }
-                    },
-                  )
-                ],
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                centerTitle: true,
-              ),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: ' Nom',
-                    hintText: 'Type your name',
-                    icon: Icon(Icons.drive_file_rename_outline),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: ' Prenom',
-                    hintText: 'Type your prenom',
-                    icon: Icon(Icons.drive_file_rename_outline),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              Padding(
-                  padding: EdgeInsets.all(12),
-                  child: IntlPhoneField(
-                    decoration: InputDecoration(
-                      labelText: 'Personal Phone Number',
-                      hintText: 'Type your personal phone',
-                      icon: Icon(Icons.phone_android),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
+                            controller: _controller2,
+                            decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                hintText: "choose Salle",
+                                hintStyle:
+                                    const TextStyle(color: Colors.blueGrey),
+                                prefixIcon: const Icon(Icons.home_filled),
+                                labelStyle: TextStyle(
+                                  color: Get.theme.primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(
+                                      color: Get.theme.primaryColor,
+                                      width: 1.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor,
+                                        width: 1.0)))),
                       ),
-                    ),
-                    initialCountryCode: 'TN',
-                    onChanged: (phone) {
-                      print(phone.completeNumber);
-                    },
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(12),
-                  child: IntlPhoneField(
+                    ],
+                  ),
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      child: Obx(
+                        () => DropdownSearch<String>(
+                            mode: Mode.BOTTOM_SHEET,
+                            showSearchBox: true,
+                            items: _MedecinController.listMedecinM
+                                .map((element) => element.nomMed.toString())
+                                .toList(),
+                            popupItemDisabled: (String s) => s.startsWith('I'),
+                            onChanged: (value) => {
+                                  _MedecinController.listMedecin.value
+                                      .forEach((element) {
+                                    if (element.typMed == value) {
+                                      _MedecinController.listMedecinM.value =
+                                          element as List<Medecin>;
+                                    }
+                                  }),
+                                },
+                            selectedItem:
+                                _MedecinController.LMedecin.value.nomMed,
+                            dropdownSearchDecoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                hintText: "Select Medecin M",
+                                hintStyle:
+                                    const TextStyle(color: Colors.blueGrey),
+                                prefixIcon: const Icon(Icons.search),
+                                labelStyle: TextStyle(
+                                  color: Get.theme.primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(
+                                      color: Get.theme.primaryColor,
+                                      width: 1.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor,
+                                        width: 1.0)))),
+                      ),
+                    )),
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      child: Obx(
+                        () => DropdownSearch<String>(
+                            mode: Mode.BOTTOM_SHEET,
+                            showSearchBox: true,
+                            items: _MedecinController.listMedecinP
+                                .map((element) => element.nomMed.toString())
+                                .toList(),
+                            popupItemDisabled: (String s) => s.startsWith('I'),
+                            onChanged: (value) => {
+                                  _MedecinController.listMedecinP.value
+                                      .forEach((element) {
+                                    if (element.typMed == value) {
+                                      _MedecinController.listMedecinP.value =
+                                          element as List<Medecin>;
+                                    }
+                                  }),
+                                },
+                            selectedItem:
+                                _MedecinController.LMedecin.value.typMed,
+                            dropdownSearchDecoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                hintText: "Select Medecin P",
+                                hintStyle:
+                                    const TextStyle(color: Colors.blueGrey),
+                                prefixIcon: const Icon(Icons.search),
+                                labelStyle: TextStyle(
+                                  color: Get.theme.primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(
+                                      color: Get.theme.primaryColor,
+                                      width: 1.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor,
+                                        width: 1.0)))),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: " Objet",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.emoji_objects),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0)))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
                       }
                       return null;
                     },
+                    readOnly: true,
+                    controller: dateController,
                     decoration: InputDecoration(
-                      labelText: 'Home Phone Number',
-                      hintText: 'Type your Home number',
-                      icon: Icon(Icons.phone),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                      ),
-                    ),
-                    initialCountryCode: 'TN',
-                    onChanged: (phone) {
-                      print(phone.completeNumber);
+                        contentPadding: const EdgeInsets.all(10),
+                        hintText: "Pick your Date",
+                        hintStyle: const TextStyle(color: Colors.blueGrey),
+                        prefixIcon: const Icon(Icons.calendar_today_outlined),
+                        labelStyle: TextStyle(
+                          color: Get.theme.primaryColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                              color: Get.theme.primaryColor, width: 1.0),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0))),
+                    onTap: () async {
+                      var date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100));
+                      dateController.text = date.toString().substring(0, 10);
                     },
-                  )),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Email Address',
-                    hintText: 'Enter your email',
-                    icon: Icon(Icons.email),
-                    isDense: true,
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: DropdownOrganisme(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  readOnly: true,
-                  controller: dateController,
-                  decoration: InputDecoration(
-                    hintText: 'Date de naissance',
-                    contentPadding: const EdgeInsets.all(5),
-                    prefixIcon: const Icon(Icons.calendar_today_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                    controller: timeinput,
+                    //editing controller of this TextField
+                    decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(10),
+                        hintText: "Enter Time",
+                        hintStyle: const TextStyle(color: Colors.blueGrey),
+                        prefixIcon: const Icon(Icons.timer),
+                        labelStyle: TextStyle(
+                          color: Get.theme.primaryColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                              color: Get.theme.primaryColor, width: 1.0),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0))),
+                    readOnly: true,
+                    //set it true, so that user will not able to edit text
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+                      if (pickedTime != null) {
+                        print(pickedTime.format(context)); //output 10:51 PM
+                        DateTime parsedTime = DateFormat.jm()
+                            .parse(pickedTime.format(context).toString());
+                        //converting to DateTime so that we can further format on different pattern.
+                        print(parsedTime); //output 1970-01-01 22:53:00.000
+                        String formattedTime =
+                            DateFormat('HH:mm:ss').format(parsedTime);
+                        print(formattedTime); //output 14:59:00
+                        //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                        {
+                          timeinput.text =
+                              formattedTime; //set the value of text field.
+                        }
+                      } else {
+                        print("Time is not selected");
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: FloatingActionButton.extended(
+                      onPressed: () {
+                        if (form.currentState!.validate())
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InfoUserView(),
+                              ));
+                      },
+                      label: const Text('Next'),
+                      icon: const Icon(Icons.arrow_right_alt),
+                      backgroundColor: Colors.black,
                     ),
                   ),
-                  onTap: () async {
-                    var date = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100));
-                    dateController.text = date.toString().substring(0, 10);
-                  },
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class InfoUserView extends GetView<RendezvousController> {
+  final form = GlobalKey<FormState>();
+  final dateController = TextEditingController();
+  final OrganismeController _OrganismeController =
+      Get.put(OrganismeController());
+  String? defaultLocale;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Form(
+            key: form,
+            child: Column(
+              children: <Widget>[
+                AppBar(
+                  leading: GestureDetector(
+                    onTap: () {
+                      Get.to(RendezvousView());
+                    },
+                    child: const Icon(Icons.backspace_outlined),
+                  ),
+                  elevation: 0,
+                  title: const Text('Info Patient'),
+                  actions: <Widget>[
+                    FlatButton(
+                        child: const Icon(Icons.check),
+                        textColor: Colors.white,
+                        onPressed: () {
+                          if (form.currentState!.validate()) {
+                            Get.snackbar(
+                                'Rendez_vous', 'Rendez-vous Confirmeé ',
+                                snackPosition: SnackPosition.TOP);
+                            Get.toNamed(Routes.LIST_COMPTES_RENDUS);
+                          }
+                        })
+                  ],
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  centerTitle: true,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: "type your name",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.person),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0)))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: "type your last name",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.person),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0)))),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: IntlPhoneField(
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: "tyep your person Number",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.send_to_mobile),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0))),
+                      initialCountryCode: 'TN',
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
+                      },
+                    )),
+                Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: IntlPhoneField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: "Type your Home Number",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.phone),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0))),
+                      initialCountryCode: 'TN',
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
+                      },
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: "type your Email",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.email_outlined),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0)))),
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      child: Obx(
+                        () => DropdownSearch<String>(
+                            mode: Mode.BOTTOM_SHEET,
+                            showSearchBox: true,
+                            items: _OrganismeController.listOrganisme
+                                .map((element) => defaultLocale == "ar"
+                                    ? element.desSoc!.toString()
+                                    : element.desSoc!.toString())
+                                .toList(),
+                            popupItemDisabled: (String s) => s.startsWith('I'),
+                            onChanged: (value) => {
+                                  _OrganismeController.listOrganisme.value
+                                      .forEach((element) {
+                                    if (element.desSoc == value) {
+                                      _OrganismeController.listOrganisme.value =
+                                          element as List<Organisme>;
+                                    }
+                                  }),
+                                },
+                            selectedItem:
+                                _OrganismeController.LOrganisme.value.desSoc,
+                            dropdownSearchDecoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                hintText: "Select Organisme",
+                                hintStyle:
+                                    const TextStyle(color: Colors.blueGrey),
+                                prefixIcon: const Icon(Icons.work),
+                                labelStyle: TextStyle(
+                                  color: Get.theme.primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide: BorderSide(
+                                      color: Get.theme.primaryColor,
+                                      width: 1.0),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    borderSide: BorderSide(
+                                        color: Get.theme.primaryColor,
+                                        width: 1.0)))),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                    readOnly: true,
+                    controller: dateController,
+                    decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(10),
+                        hintText: "type your date of Birth",
+                        hintStyle: const TextStyle(color: Colors.blueGrey),
+                        prefixIcon: const Icon(Icons.calendar_today_outlined),
+                        labelStyle: TextStyle(
+                          color: Get.theme.primaryColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                              color: Get.theme.primaryColor, width: 1.0),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0))),
+                    onTap: () async {
+                      var date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100));
+                      dateController.text = date.toString().substring(0, 10);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

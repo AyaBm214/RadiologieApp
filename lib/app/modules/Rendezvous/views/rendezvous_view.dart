@@ -16,7 +16,7 @@ class RendezvousView extends GetView<RendezvousController> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RendezvousFrom(),
+                  builder: (context) => FormulaireView(),
                 ));
           },
           child: const Icon(Icons.add),
