@@ -1,12 +1,32 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
+import 'package:radiologiev2/app/data/Services/ServiceExam.dart';
 import 'package:radiologiev2/app/data/Services/ServiceMedcin.dart';
 import 'package:radiologiev2/app/data/Services/ServiceOrganisme.dart';
+import 'package:radiologiev2/app/data/Services/ServiceSalle.dart';
 import 'package:radiologiev2/app/data/models/CenterModel.dart';
+import 'package:radiologiev2/app/data/models/ExamModel.dart';
 import 'package:radiologiev2/app/data/models/Medcin.dart';
 import 'package:radiologiev2/app/data/models/OrganismeModel.dart';
+import 'package:radiologiev2/app/data/models/SalleModel.dart';
 
-class RendezvousController extends GetxController {}
+class RendezvousController extends GetxController {
+  String? validator(String value) {
+    if (value.isEmpty) {
+      return "Please enter some text";
+    }
+    return null;
+  }
+
+  String? validateEmail(String value) {
+    if (!GetUtils.isEmail(value)) {
+      return "Provide valid Email";
+    }
+    return null;
+  }
+}
 
 class MedecinController extends GetxController {
   final ServiceMedecin service_medecin = ServiceMedecin();
@@ -84,5 +104,43 @@ class CenterController extends GetxController {
       listCenter.value = centers;
     }
     return listCenter;
+  }
+}
+
+////////////////////////////////////////
+class ExamController extends GetxController {
+  final ServiceExam se = ServiceExam();
+  RxList<Exam> listExam = <Exam>[].obs;
+  Rx<Exam> LExam = Exam().obs;
+  @override
+  void onInit() {
+    fetchExam();
+  }
+
+  fetchExam() async {
+    print("***************Fetching Exam********************");
+    var Exames = await se.fetchExam();
+    if (Exames != null) {
+      listExam.value = Exames;
+    }
+  }
+}
+//////////////////////////////////////////////
+
+class SalleController extends GetxController {
+  final ServiceSalle ss = ServiceSalle();
+  RxList<Salle> listSalle = <Salle>[].obs;
+  Rx<Salle> Lsalle = Salle().obs;
+  @override
+  void onInit() {
+    fetchSalle();
+  }
+
+  fetchSalle() async {
+    print("***************Fetching Salle********************");
+    var Salles = await ss.fetchSalle();
+    if (Salles != null) {
+      listSalle.value = Salles;
+    }
   }
 }

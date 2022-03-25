@@ -106,18 +106,6 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
                       },
                     ),
                   )),
-              SizedBox(
-                width: 120,
-                child: SafeArea(
-                  child: IconButton(
-                      icon: const Icon(Icons.filter_alt_rounded),
-                      color: Colors.black,
-                      padding: const EdgeInsets.only(right: 5, top: 10),
-                      highlightColor: Colors.white,
-                      iconSize: 35,
-                      onPressed: () {}),
-                ),
-              ),
             ]),
           ),
         ));
