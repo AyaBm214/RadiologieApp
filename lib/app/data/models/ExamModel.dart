@@ -25,30 +25,30 @@ class Exam {
 
   String? codexam;
   String? desexam;
-  int? prixrad;
-  int? prixhon;
-  int? coeff;
+  String? prixrad;
+  String? prixhon;
+  String? coeff;
   String? famexam;
-  int? prixpharm;
+  String? prixpharm;
   double? total;
   bool? actif;
-  int? nature;
+  String? nature;
   dynamic idType;
-  int? mnthoExamCnam;
+  String? mnthoExamCnam;
 
   factory Exam.fromMap(Map<String, dynamic> json) => Exam(
         codexam: json["codexam"],
         desexam: json["desexam"],
-        prixrad: json["prixrad"],
-        prixhon: json["prixhon"],
-        coeff: json["coeff"],
+        prixrad: json["prixrad"].toString(),
+        prixhon: json["prixhon"].toString(),
+        coeff: json["coeff"].toString(),
         famexam: json["famexam"],
-        prixpharm: json["prixpharm"],
+        prixpharm: json["prixpharm"].toString(),
         total: json["total"].toDouble(),
         actif: json["actif"],
-        nature: json["nature"],
+        nature: json["nature"].toString(),
         idType: json["idType"],
-        mnthoExamCnam: json["mnthoExamCNAM"],
+        mnthoExamCnam: json["mnthoExamCNAM"].toString(),
       );
 
   Map<String, dynamic> toJson() => {

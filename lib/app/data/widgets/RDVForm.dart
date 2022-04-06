@@ -1,40 +1,32 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:radiologiev2/app/data/models/CenterModel.dart';
-import 'package:radiologiev2/app/data/models/ExamModel.dart';
 import 'package:radiologiev2/app/data/models/Medcin.dart';
-import 'package:radiologiev2/app/data/models/OrganismeModel.dart';
-import 'package:radiologiev2/app/data/models/SalleModel.dart';
+import 'package:radiologiev2/app/data/models/RendezVousModel.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/controllers/rendezvous_controller.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/views/rendezvous_view.dart';
 import 'package:radiologiev2/app/routes/app_pages.dart';
 
 class FormulaireView extends GetView<RendezvousController> {
-  final form = GlobalKey<FormState>();
-  final CenterController _CenterController = Get.put(CenterController());
-  final MedecinController _MedecinController = Get.put(MedecinController());
-  final SalleController _SalleController = Get.put(SalleController());
-  final ExamController _ExamController = Get.put(ExamController());
-
+  final form_rdv = GlobalKey<FormState>();
+  final RendezvousController rendezvousController =
+      Get.put(RendezvousController());
+  final RendezVous rdv = RendezVous();
   String? defaultLocale;
-
-  final dateController = TextEditingController();
+  final dateRdvController = TextEditingController();
+  final dateBirthController = TextEditingController();
   TextEditingController timeinput = TextEditingController();
+  TextEditingController Dateinput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Form(
-          key: form,
+          key: form_rdv,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -58,15 +50,15 @@ class FormulaireView extends GetView<RendezvousController> {
                                   onPressed: () {
                                     Get.to(RendezvousView());
                                   },
-                                  child: Text("yes"),
+                                  child: const Text("yes"),
                                 ),
                               ),
                               GestureDetector(
                                 child: TextButton(
                                   onPressed: () {
-                                    Get.to(FormulaireView());
+                                    Get.back();
                                   },
-                                  child: Text("No"),
+                                  child: const Text("No"),
                                 ),
                               ),
                             ],
@@ -78,7 +70,28 @@ class FormulaireView extends GetView<RendezvousController> {
                   ),
                   elevation: 0,
                   title: const Text('Rendez Vous'),
-                  actions: const <Widget>[],
+                  actions: <Widget>[
+                    IconButton(
+                      icon: const Icon(
+                        Icons.check,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        if (form_rdv.currentState!.validate()) {
+                          print(rdv.toString());
+                          {
+                            Get.snackbar(
+                                'Confirmation', 'RendezVous Confirmée ',
+                                snackPosition: SnackPosition.BOTTOM);
+                            Get.toNamed(Routes.RENDEZVOUS);
+                          }
+                        } else {
+                          Get.snackbar('Error', 'RendezVous non Confirmée',
+                              snackPosition: SnackPosition.BOTTOM);
+                        }
+                      },
+                    ),
+                  ],
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   centerTitle: true,
                 ),
@@ -90,23 +103,24 @@ class FormulaireView extends GetView<RendezvousController> {
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
-                            items: _CenterController.listCenter
+                            items: rendezvousController.listCenter
                                 .map((element) => defaultLocale == "ar"
                                     ? element.designCentre.toString()
                                     : element.designCentre!.toString())
                                 .toList(),
-                            popupItemDisabled: (String s) => s.startsWith('I'),
                             onChanged: (value) => {
-                                  _CenterController.listCenter.value
+                                  rdv.Centre = value!,
+                                  print(value),
+                                  rendezvousController.listCenter.value
                                       .forEach((element) {
                                     if (element.designCentre == value) {
-                                      _CenterController.listCenter.value =
-                                          element as List<Centerv>;
+                                      rendezvousController.Lcenterv.value =
+                                          element;
                                     }
                                   }),
                                 },
-                            selectedItem:
-                                _CenterController.Lcenterv.value.designCentre,
+                            selectedItem: rendezvousController
+                                .Lcenterv.value.designCentre,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Center",
@@ -138,23 +152,24 @@ class FormulaireView extends GetView<RendezvousController> {
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
-                            items: _SalleController.listSalle
+                            items: rendezvousController.listSalle
                                 .map((element) => defaultLocale == "ar"
                                     ? element.designation.toString()
                                     : element.designation!.toString())
                                 .toList(),
-                            popupItemDisabled: (String s) => s.startsWith('I'),
                             onChanged: (value) => {
-                                  _SalleController.listSalle.value
+                                  rdv.Salle = value!,
+                                  print(value),
+                                  rendezvousController.listSalle.value
                                       .forEach((element) {
                                     if (element.designation == value) {
-                                      _SalleController.listSalle.value =
-                                          element as List<Salle>;
+                                      rendezvousController.Lsalle.value =
+                                          element;
                                     }
                                   }),
                                 },
                             selectedItem:
-                                _SalleController.Lsalle.value.designation,
+                                rendezvousController.Lsalle.value.designation,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Salle",
@@ -186,21 +201,22 @@ class FormulaireView extends GetView<RendezvousController> {
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
-                            items: _MedecinController.listMedecinM
+                            items: rendezvousController.listMedecinM
                                 .map((element) => element.nomMed.toString())
                                 .toList(),
-                            popupItemDisabled: (String s) => s.startsWith('I'),
                             onChanged: (value) => {
-                                  _MedecinController.listMedecin.value
+                                  rdv.medecinM = value!,
+                                  print(value),
+                                  rendezvousController.listMedecin.value
                                       .forEach((element) {
                                     if (element.typMed == value) {
-                                      _MedecinController.listMedecinM.value =
+                                      rendezvousController.listMedecinM.value =
                                           element as List<Medecin>;
                                     }
                                   }),
                                 },
                             selectedItem:
-                                _MedecinController.LMedecin.value.nomMed,
+                                rendezvousController.LMedecin.value.nomMed,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Medecin M",
@@ -232,21 +248,22 @@ class FormulaireView extends GetView<RendezvousController> {
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
-                            items: _MedecinController.listMedecinP
+                            items: rendezvousController.listMedecinP
                                 .map((element) => element.nomMed.toString())
                                 .toList(),
-                            popupItemDisabled: (String s) => s.startsWith('I'),
                             onChanged: (value) => {
-                                  _MedecinController.listMedecinP.value
+                                  rdv.medecinP = value!,
+                                  print(value),
+                                  rendezvousController.listMedecinP.value
                                       .forEach((element) {
                                     if (element.typMed == value) {
-                                      _MedecinController.listMedecinP.value =
+                                      rendezvousController.listMedecinP.value =
                                           element as List<Medecin>;
                                     }
                                   }),
                                 },
                             selectedItem:
-                                _MedecinController.LMedecin.value.typMed,
+                                rendezvousController.LMedecin.value.typMed,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Medecin P",
@@ -273,6 +290,10 @@ class FormulaireView extends GetView<RendezvousController> {
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                      onChanged: (value) {
+                        rdv.objet = value;
+                        print(value);
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
@@ -306,22 +327,28 @@ class FormulaireView extends GetView<RendezvousController> {
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
-                            items: _ExamController.listExam
+                            items: rendezvousController.listExam
                                 .map((element) => defaultLocale == "ar"
-                                    ? element.desexam.toString()
-                                    : element.desexam!.toString())
+                                    ? element.codexam!.toString() +
+                                        " / " +
+                                        element.desexam.toString()
+                                    : element.codexam!.toString() +
+                                        " / " +
+                                        element.desexam!.toString())
                                 .toList(),
-                            popupItemDisabled: (String s) => s.startsWith('I'),
                             onChanged: (value) => {
-                                  _ExamController.listExam.value
+                                  rdv.Exam = value!,
+                                  print(value),
+                                  rendezvousController.listExam.value
                                       .forEach((element) {
                                     if (element.desexam == value) {
-                                      _ExamController.listExam.value =
-                                          element as List<Exam>;
+                                      rendezvousController.LExam.value =
+                                          element;
                                     }
                                   }),
                                 },
-                            selectedItem: _ExamController.LExam.value.desexam,
+                            selectedItem:
+                                rendezvousController.LExam.value.desexam,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Code/designation",
@@ -353,50 +380,6 @@ class FormulaireView extends GetView<RendezvousController> {
                         SizedBox(
                             width: 170,
                             child: SafeArea(
-                                child: TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
-                                }
-                                return null;
-                              },
-                              readOnly: true,
-                              controller: dateController,
-                              decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.all(5),
-                                  hintText: "Pick your Date",
-                                  hintStyle:
-                                      const TextStyle(color: Colors.blueGrey),
-                                  prefixIcon:
-                                      const Icon(Icons.calendar_today_outlined),
-                                  labelStyle: TextStyle(
-                                    color: Get.theme.primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    borderSide: BorderSide(
-                                        color: Get.theme.primaryColor,
-                                        width: 1.0),
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      borderSide: BorderSide(
-                                          color: Get.theme.primaryColor,
-                                          width: 1.0))),
-                              onTap: () async {
-                                var date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2100));
-                                dateController.text =
-                                    date.toString().substring(0, 10);
-                              },
-                            ))),
-                        SizedBox(
-                            width: 170,
-                            child: SafeArea(
                               child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -404,138 +387,131 @@ class FormulaireView extends GetView<RendezvousController> {
                                   }
                                   return null;
                                 },
-                                controller: timeinput,
-                                //editing controller of this TextField
+                                readOnly: true,
+                                controller: dateBirthController,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5),
-                                    hintText: "Enter Time",
+                                    hintText: " Date Rdv",
                                     hintStyle:
                                         const TextStyle(color: Colors.blueGrey),
-                                    prefixIcon: const Icon(Icons.timer),
+                                    prefixIcon:
+                                        const Icon(Icons.calendar_today),
                                     labelStyle: TextStyle(
-                                      color: Get.theme.primaryColor,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                       borderSide: BorderSide(
-                                          color: Get.theme.primaryColor,
-                                          width: 1.0),
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20.0),
                                         borderSide: BorderSide(
-                                            color: Get.theme.primaryColor,
-                                            width: 1.0))),
-                                readOnly: true,
-                                //set it true, so that user will not able to edit text
+                                          color: Colors.white,
+                                        ))),
                                 onTap: () async {
-                                  TimeOfDay? pickedTime = await showTimePicker(
-                                    initialTime: TimeOfDay.now(),
-                                    context: context,
-                                  );
-                                  if (pickedTime != null) {
-                                    print(pickedTime
-                                        .format(context)); //output 10:51 PM
-                                    DateTime parsedTime = DateFormat.jm().parse(
-                                        pickedTime.format(context).toString());
-                                    //converting to DateTime so that we can further format on different pattern.
-                                    print(
-                                        parsedTime); //output 1970-01-01 22:53:00.000
-                                    String formattedTime =
-                                        DateFormat('HH:mm:ss')
-                                            .format(parsedTime);
-                                    print(formattedTime); //output 14:59:00
-                                    //DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                                    {
-                                      timeinput.text =
-                                          formattedTime; //set the value of text field.
-                                    }
-                                  } else {
-                                    print("Time is not selected");
-                                  }
+                                  DatePicker.showDatePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2000, 3, 5),
+                                      maxTime: DateTime(2025, 6, 7),
+                                      onChanged: (date) {
+                                    rdv.Daterdv = date;
+                                    print(date);
+                                  }, onConfirm: (date) {
+                                    rdv.Daterdv = date;
+                                    print(date);
+                                  },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.en);
                                 },
                               ),
                             )),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SizedBox(
+                                width: 150,
+                                child: SafeArea(
+                                    child: TextField(
+                                  controller:
+                                      timeinput, //editing controller of this TextField
+                                  decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.all(5),
+                                      hintText: " Heure",
+                                      hintStyle: const TextStyle(
+                                          color: Colors.blueGrey),
+                                      prefixIcon: const Icon(Icons.timer),
+                                      labelStyle: TextStyle(
+                                        color: Get.theme.primaryColor,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        borderSide: BorderSide(
+                                          color: Get.theme.primaryColor,
+                                        ),
+                                      ),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          borderSide: BorderSide(
+                                            color: Get.theme.primaryColor,
+                                          ))),
+                                  readOnly:
+                                      true, //set it true, so that user will not able to edit text
+                                  onTap: () async {
+                                    TimeOfDay? pickedTime =
+                                        await showTimePicker(
+                                      initialTime: TimeOfDay.now(),
+                                      context: context,
+                                    );
+
+                                    if (pickedTime != null) {
+                                      print(pickedTime
+                                          .format(context)); //output 10:51 PM
+                                      DateTime parsedTime = DateFormat.jm()
+                                          .parse(pickedTime
+                                              .format(context)
+                                              .toString());
+                                      //converting to DateTime so that we can further format on different pattern.
+                                      print(
+                                          parsedTime); //output 1970-01-01 22:53:00.000
+                                      String formattedTime =
+                                          DateFormat('HH:mm:ss')
+                                              .format(parsedTime);
+                                      print(formattedTime); //output 14:59:00
+                                      //DateFormat() is from intl package, you can format the time on any pattern you need.
+                                      {
+                                        timeinput.text =
+                                            formattedTime; //set the value of text field.
+                                      }
+                                      ;
+                                    } else {
+                                      print("Time is not selected");
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    rdv.Heurerdv = DateTime.parse(value);
+                                    print("ccc $value");
+                                  },
+                                ))),
+                          ),
+                        ),
                       ],
                     )),
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: FloatingActionButton.extended(
-                      onPressed: () {
-                        if (form.currentState!.validate()) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => InfoUserView(),
-                              ));
-                        }
-                      },
-                      label: const Text('Next'),
-                      icon: const Icon(Icons.arrow_right_alt),
-                      backgroundColor: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class InfoUserView extends GetView<RendezvousController> {
-  final form = GlobalKey<FormState>();
-  final dateController = TextEditingController();
-  final OrganismeController _OrganismeController =
-      Get.put(OrganismeController());
-  String? defaultLocale;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Form(
-            key: form,
-            child: Column(
-              children: <Widget>[
-                AppBar(
-                  leading: GestureDetector(
-                    onTap: () {
-                      Get.to(FormulaireView());
-                    },
-                    child: const Icon(Icons.arrow_back_ios_sharp),
-                  ),
-                  elevation: 0,
-                  title: const Text('Info Patient'),
-                  actions: <Widget>[
-                    FlatButton(
-                        child: const Icon(Icons.check),
-                        textColor: Colors.white,
-                        onPressed: () {
-                          if (form.currentState!.validate()) {
-                            Get.snackbar(
-                                'Rendez_vous', 'Rendez-vous Confirmeé ',
-                                snackPosition: SnackPosition.TOP);
-                            Get.toNamed(Routes.LIST_COMPTES_RENDUS);
-                          }
-                        })
-                  ],
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  centerTitle: true,
-                ),
-                Padding(
+                Container(
+                  alignment: Alignment.center,
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                      onChanged: (value) {
+                        rdv.nomCli = value;
+                        print(value);
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
@@ -544,7 +520,7 @@ class InfoUserView extends GetView<RendezvousController> {
                       },
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
-                          hintText: "type your name",
+                          hintText: "Name",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
                           prefixIcon: const Icon(Icons.person),
                           labelStyle: TextStyle(
@@ -561,9 +537,15 @@ class InfoUserView extends GetView<RendezvousController> {
                               borderSide: BorderSide(
                                   color: Get.theme.primaryColor, width: 1.0)))),
                 ),
-                Padding(
+                Container(
+                  alignment: Alignment.center,
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                      onChanged: (value) {
+                        rdv.prenom = value;
+                        print(value);
+                        //print("onChanged: "+ServiceUser.username);
+                      },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
@@ -572,7 +554,7 @@ class InfoUserView extends GetView<RendezvousController> {
                       },
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
-                          hintText: "type your last name",
+                          hintText: " Last name",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
                           prefixIcon: const Icon(Icons.person),
                           labelStyle: TextStyle(
@@ -589,12 +571,13 @@ class InfoUserView extends GetView<RendezvousController> {
                               borderSide: BorderSide(
                                   color: Get.theme.primaryColor, width: 1.0)))),
                 ),
-                Padding(
+                Container(
+                    alignment: Alignment.center,
                     padding: const EdgeInsets.all(12),
                     child: IntlPhoneField(
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
-                          hintText: "type your person Number",
+                          hintText: "Person Number",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
                           prefixIcon: const Icon(Icons.send_to_mobile),
                           labelStyle: TextStyle(
@@ -611,11 +594,13 @@ class InfoUserView extends GetView<RendezvousController> {
                               borderSide: BorderSide(
                                   color: Get.theme.primaryColor, width: 1.0))),
                       initialCountryCode: 'TN',
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
+                      onChanged: (value) {
+                        rdv.tel = value;
+                        print(value);
                       },
                     )),
-                Padding(
+                Container(
+                    alignment: Alignment.center,
                     padding: const EdgeInsets.all(12),
                     child: IntlPhoneField(
                       validator: (value) {
@@ -626,7 +611,7 @@ class InfoUserView extends GetView<RendezvousController> {
                       },
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
-                          hintText: "Type your Home Number",
+                          hintText: " Home Number",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
                           prefixIcon: const Icon(Icons.phone),
                           labelStyle: TextStyle(
@@ -643,19 +628,25 @@ class InfoUserView extends GetView<RendezvousController> {
                               borderSide: BorderSide(
                                   color: Get.theme.primaryColor, width: 1.0))),
                       initialCountryCode: 'TN',
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
+                      onChanged: (value) {
+                        rdv.telperson = value;
+                        print(value);
                       },
                     )),
-                Padding(
+                Container(
+                  alignment: Alignment.center,
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                      onChanged: (value) {
+                        rdv.email = value;
+                        print(value);
+                      },
                       validator: (value) {
-                        return controller.validateEmail(value!);
+                        return rendezvousController.validateEmail(value!);
                       },
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
-                          hintText: "type your Email",
+                          hintText: " Email",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
                           prefixIcon: const Icon(Icons.email_outlined),
                           labelStyle: TextStyle(
@@ -680,23 +671,24 @@ class InfoUserView extends GetView<RendezvousController> {
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
-                            items: _OrganismeController.listOrganisme
+                            items: rendezvousController.listOrganisme
                                 .map((element) => defaultLocale == "ar"
                                     ? element.desSoc!.toString()
                                     : element.desSoc!.toString())
                                 .toList(),
-                            popupItemDisabled: (String s) => s.startsWith('I'),
                             onChanged: (value) => {
-                                  _OrganismeController.listOrganisme.value
+                                  rdv.organisme = value!,
+                                  print(value),
+                                  rendezvousController.listOrganisme.value
                                       .forEach((element) {
                                     if (element.desSoc == value) {
-                                      _OrganismeController.listOrganisme.value =
-                                          element as List<Organisme>;
+                                      rendezvousController.LOrganisme.value =
+                                          element;
                                     }
                                   }),
                                 },
                             selectedItem:
-                                _OrganismeController.LOrganisme.value.desSoc,
+                                rendezvousController.LOrganisme.value.desSoc,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Organisme",
@@ -720,9 +712,13 @@ class InfoUserView extends GetView<RendezvousController> {
                                         width: 1.0)))),
                       ),
                     )),
-                Padding(
+                Container(
+                  alignment: Alignment.center,
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                    onChanged: (value) {
+                      print(value);
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
@@ -730,32 +726,32 @@ class InfoUserView extends GetView<RendezvousController> {
                       return null;
                     },
                     readOnly: true,
-                    controller: dateController,
                     decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(10),
-                        hintText: "type your date of Birth",
+                        hintText: " Date of Birth",
                         hintStyle: const TextStyle(color: Colors.blueGrey),
                         prefixIcon: const Icon(Icons.calendar_today_outlined),
                         labelStyle: TextStyle(
-                          color: Get.theme.primaryColor,
+                          color: Colors.black,
                           fontWeight: FontWeight.w700,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              color: Get.theme.primaryColor, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 1.0),
                         ),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                                color: Get.theme.primaryColor, width: 1.0))),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 1.0))),
                     onTap: () async {
-                      var date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2100));
-                      dateController.text = date.toString().substring(0, 10);
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(2000, 3, 5),
+                          maxTime: DateTime(2025, 6, 7),
+                          onChanged: (date) {}, onConfirm: (date) {
+                        print('confirm $date');
+                      }, currentTime: DateTime.now(), locale: LocaleType.en);
                     },
                   ),
                 ),

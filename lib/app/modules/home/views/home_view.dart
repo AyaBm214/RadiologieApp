@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:radiologiev2/app/data/Services/ServiceUser.dart';
 import 'package:radiologiev2/app/data/Services/webService.dart';
 import 'package:radiologiev2/app/data/models/CliniqueModel.dart';
 import 'package:radiologiev2/app/modules/login/views/login_view.dart';
@@ -10,7 +11,7 @@ import '../controllers/home_controller.dart';
 // ignore: must_be_immutable
 class HomeView extends GetView<HomeController> {
   @override
-  HomeController controller = Get.put(HomeController());
+  HomeController homeController = Get.put(HomeController());
   final WebService cliniqueWebServices = WebService();
   late List<clinique> listClinique;
 
@@ -23,7 +24,7 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          onTap: () => controller.fetchClinique(),
+          onTap: () => homeController.fetchClinique(),
           child: const Icon(
             Icons.refresh_rounded,
             color: Colors.blue,
@@ -34,14 +35,14 @@ class HomeView extends GetView<HomeController> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: Obx(
-          () => !controller.isSearching.value
+          () => !homeController.isSearching.value
               ? Image.asset(
                   'assets/images/logo.png',
                   width: 200,
                   height: 500,
                 )
               : TextField(
-                  onChanged: (value) => controller.searchClinique(value),
+                  onChanged: (value) => homeController.searchClinique(value),
                   style: const TextStyle(color: Colors.black),
                   decoration: const InputDecoration(
                     icon: Icon(
@@ -58,7 +59,7 @@ class HomeView extends GetView<HomeController> {
         centerTitle: true,
         actions: [
           Obx(
-            () => !controller.isSearching.value
+            () => !homeController.isSearching.value
                 ? IconButton(
                     icon: const Icon(
                       Icons.search,
@@ -66,7 +67,7 @@ class HomeView extends GetView<HomeController> {
                       size: 25.0,
                     ),
                     onPressed: () {
-                      controller.changeStatus(true);
+                      homeController.changeStatus(true);
                     })
                 : IconButton(
                     icon: const Icon(
@@ -75,9 +76,9 @@ class HomeView extends GetView<HomeController> {
                       size: 30.0,
                     ),
                     onPressed: () {
-                      controller.changeStatus(false);
-                      controller.Cliniquetrouve.value =
-                          controller.listcliniques;
+                      homeController.changeStatus(false);
+                      homeController.Cliniquetrouve.value =
+                          homeController.listcliniques;
                     },
                   ),
           ),
@@ -85,7 +86,7 @@ class HomeView extends GetView<HomeController> {
       ),
       body: SingleChildScrollView(
           child: FutureBuilder(
-              future: controller.fetchClinique(),
+              future: homeController.fetchClinique(),
               builder: (BuildContext context, snapshot) {
                 if (snapshot.hasError) {
                   print(snapshot.error);
@@ -114,15 +115,18 @@ class HomeView extends GetView<HomeController> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         physics: const ScrollPhysics(),
-        itemCount: controller.Cliniquetrouve.length,
+        itemCount: homeController.Cliniquetrouve.length,
         itemBuilder: (BuildContext context, int index) {
           // ignore: unused_local_variable
-          clinique cliniques = controller.Cliniquetrouve[index];
+          clinique cliniques = homeController.Cliniquetrouve[index];
           return Card(
             child: InkWell(
               onTap: () {
-                controller.configuration.NomCliniqueset = cliniques.nom!;
-                controller.configuration.url = cliniques.url!;
+                homeController.configuration.NomCliniqueset = cliniques.nom!;
+                homeController.configuration.url = cliniques.url!;
+                ServiceUser.configuration.NomCliniqueset = cliniques.nom!;
+                ServiceUser.configuration.url = cliniques.url!;
+                ServiceUser.configuration.username = "";
                 Get.offAll(LoginView());
               },
               child: Column(

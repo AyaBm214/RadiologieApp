@@ -4,6 +4,7 @@ Color primaryBlue = const Color(0xff2972ff);
 Color textBlack = const Color(0xff222222);
 Color textGrey = const Color(0xff94959b);
 Color textWhiteGrey = const Color(0xfff1f1f5);
+late Color? backgroundColor;
 
 TextStyle heading2 = TextStyle(
   fontSize: 24,

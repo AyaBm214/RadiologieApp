@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
 import 'package:radiologiev2/app/data/Services/ServiceExam.dart';
 import 'package:radiologiev2/app/data/Services/ServiceMedcin.dart';
@@ -13,6 +14,35 @@ import 'package:radiologiev2/app/data/models/OrganismeModel.dart';
 import 'package:radiologiev2/app/data/models/SalleModel.dart';
 
 class RendezvousController extends GetxController {
+  final ServiceCenter _serviceCenter = ServiceCenter();
+  RxList<Centerv> listCenter = <Centerv>[].obs;
+  Rx<Centerv> Lcenterv = Centerv().obs;
+  final ServiceMedecin service_medecin = ServiceMedecin();
+  RxList<Medecin> listMedecin = <Medecin>[].obs;
+  RxList<Medecin> listMedecinP = <Medecin>[].obs;
+  RxList<Medecin> listMedecinM = <Medecin>[].obs;
+  Rx<Medecin> LMedecin = Medecin(codMed: '').obs;
+  Rx<Medecin> LMedecinP = Medecin(codMed: '').obs;
+  Rx<Medecin> LMedecinM = Medecin(codMed: '').obs;
+  final ServiceOrganisme so = ServiceOrganisme();
+  RxList<Organisme> listOrganisme = <Organisme>[].obs;
+  Rx<Organisme> LOrganisme = Organisme().obs;
+  final ServiceExam se = ServiceExam();
+  RxList<Exam> listExam = <Exam>[].obs;
+  Rx<Exam> LExam = Exam().obs;
+  final ServiceSalle ss = ServiceSalle();
+  RxList<Salle> listSalle = <Salle>[].obs;
+  Rx<Salle> Lsalle = Salle().obs;
+
+  @override
+  void onInit() {
+    fetchCenter();
+    fetchMedecin();
+    fetchOrganisme();
+    fetchExam();
+    fetchSalle();
+  }
+
   String? validator(String value) {
     if (value.isEmpty) {
       return "Please enter some text";
@@ -26,20 +56,14 @@ class RendezvousController extends GetxController {
     }
     return null;
   }
-}
 
-class MedecinController extends GetxController {
-  final ServiceMedecin service_medecin = ServiceMedecin();
-  RxList<Medecin> listMedecin = <Medecin>[].obs;
-  RxList<Medecin> listMedecinP = <Medecin>[].obs;
-  RxList<Medecin> listMedecinM = <Medecin>[].obs;
-  Rx<Medecin> LMedecin = Medecin(codMed: '').obs;
-  Rx<Medecin> LMedecinP = Medecin(codMed: '').obs;
-  Rx<Medecin> LMedecinM = Medecin(codMed: '').obs;
-
-  @override
-  void onInit() {
-    fetchMedecin();
+  fetchCenter() async {
+    print("***************Fetching center********************");
+    var centers = await _serviceCenter.fetchCenter();
+    if (centers != null) {
+      listCenter.value = centers;
+    }
+    return listCenter;
   }
 
   Future fetchMedecin() async {
@@ -57,17 +81,6 @@ class MedecinController extends GetxController {
     });
     return listMedecin;
   }
-}
-
-////////////////////////////////////////
-class OrganismeController extends GetxController {
-  final ServiceOrganisme so = ServiceOrganisme();
-  RxList<Organisme> listOrganisme = <Organisme>[].obs;
-  Rx<Organisme> LOrganisme = Organisme().obs;
-  @override
-  void onInit() {
-    fetchOrganisme();
-  }
 
   fetchOrganisme() async {
     print("***************Fetching Organisme********************");
@@ -75,46 +88,6 @@ class OrganismeController extends GetxController {
     if (Organismes != null) {
       listOrganisme.value = Organismes;
     }
-  }
-}
-
-//////////////////////////////////
-class CenterController extends GetxController {
-  final ServiceCenter _serviceCenter = ServiceCenter();
-  RxList<Centerv> listCenter = <Centerv>[].obs;
-  Rx<Centerv> Lcenterv = Centerv(
-          indImage: null,
-          kt: null,
-          hopital: null,
-          nature: null,
-          codeCentre: '',
-          designCentre: '')
-      .obs;
-
-  @override
-  // ignore: must_call_super
-  void onInit() {
-    fetchCenter();
-  }
-
-  fetchCenter() async {
-    print("***************Fetching center********************");
-    var centers = await _serviceCenter.fetchCenter();
-    if (centers != null) {
-      listCenter.value = centers;
-    }
-    return listCenter;
-  }
-}
-
-////////////////////////////////////////
-class ExamController extends GetxController {
-  final ServiceExam se = ServiceExam();
-  RxList<Exam> listExam = <Exam>[].obs;
-  Rx<Exam> LExam = Exam().obs;
-  @override
-  void onInit() {
-    fetchExam();
   }
 
   fetchExam() async {
@@ -124,17 +97,6 @@ class ExamController extends GetxController {
       listExam.value = Exames;
     }
   }
-}
-//////////////////////////////////////////////
-
-class SalleController extends GetxController {
-  final ServiceSalle ss = ServiceSalle();
-  RxList<Salle> listSalle = <Salle>[].obs;
-  Rx<Salle> Lsalle = Salle().obs;
-  @override
-  void onInit() {
-    fetchSalle();
-  }
 
   fetchSalle() async {
     print("***************Fetching Salle********************");
@@ -143,4 +105,23 @@ class SalleController extends GetxController {
       listSalle.value = Salles;
     }
   }
+}
+
+setSelectedCentre(value) {}
+
+calculateAge(DateTime birthDate) {
+  DateTime currentDate = DateTime.now();
+  int age = currentDate.year - birthDate.year;
+  int month1 = currentDate.month;
+  int month2 = birthDate.month;
+  if (month2 > month1) {
+    age--;
+  } else if (month1 == month2) {
+    int day1 = currentDate.day;
+    int day2 = birthDate.day;
+    if (day2 > day1) {
+      age--;
+    }
+  }
+  return age;
 }

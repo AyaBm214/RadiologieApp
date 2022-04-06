@@ -47,12 +47,38 @@ class NavigationDrawer extends StatelessWidget {
             color: Colors.black38,
           ),
           ListTile(
-            trailing: const Icon(Icons.calendar_today_outlined),
+            trailing: const Icon(Icons.border_all),
+            title: const Text("Exploitation"),
+            onTap: () {
+              Navigator.of(context).pop();
+
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => HomeView()));
+            },
+          ),
+          const Divider(
+            color: Colors.black38,
+          ),
+          ListTile(
+            trailing: const Icon(Icons.event),
             title: const Text("Rendez-vous"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => RendezvousView()));
+            },
+          ),
+          const Divider(
+            color: Colors.black38,
+          ),
+          ListTile(
+            trailing: const Icon(Icons.home_outlined),
+            title: const Text("Bloc Cathé"),
+            onTap: () {
+              Navigator.of(context).pop();
+
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => HomeView()));
             },
           ),
           const Divider(

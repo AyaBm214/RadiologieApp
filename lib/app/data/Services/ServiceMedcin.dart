@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:radiologiev2/app/data/models/Medcin.dart';
 
+import 'ServiceUser.dart';
+
 class ServiceMedecin {
   Future fetchMedcin() async {
-    final response = await http
-        .get(Uri.parse('http://192.168.1.242:9015/radiologie/api/medecins'));
+    final response = await http.get(
+        Uri.parse(ServiceUser.configuration.url + '/radiologie/api/medecins'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.

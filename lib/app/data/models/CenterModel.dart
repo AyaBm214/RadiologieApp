@@ -1,27 +1,27 @@
-
 // To parse this JSON data, do
 //
 //     final centerv = centervFromJson(jsonString);
 
 import 'dart:convert';
+
 List<Centerv> postFromJson(String str) =>
     List<Centerv>.from(json.decode(str).map((x) => Centerv.fromMap(x)));
 
 class Centerv {
   Centerv({
-    required this.codeCentre,
-    required this.designCentre,
+    this.codeCentre,
+    this.designCentre,
     this.tableCptRendu,
-    required this.nature,
+    this.nature,
     this.duree,
     this.natureActe,
     this.bloc,
     this.natureAdmission,
-    required this.kt,
-    required this.hopital,
+    this.kt,
+    this.hopital,
     this.numrecept,
     this.autorisFacturationHonoraire,
-    required this.indImage,
+    this.indImage,
     this.imgCpt,
     this.codMotif,
   });
@@ -43,22 +43,20 @@ class Centerv {
   dynamic codMotif;
 
   factory Centerv.fromMap(Map<String, dynamic> json) => Centerv(
-    codeCentre: json["codeCentre"],
-    designCentre: json["designCentre"],
-    tableCptRendu: json["tableCptRendu"],
-    nature: json["nature"],
-    duree: json["duree"],
-    natureActe: json["natureActe"],
-    bloc: json["bloc"],
-    natureAdmission: json["natureAdmission"],
-    kt: json["kt"],
-    hopital: json["hopital"],
-    numrecept: json["numrecept"],
-    autorisFacturationHonoraire: json["autorisFacturationHonoraire"],
-    indImage: json["indImage"],
-    imgCpt: json["imgCpt"],
-    codMotif: json["codMotif"],
-  );
-
+        codeCentre: json["codeCentre"],
+        designCentre: json["designCentre"],
+        tableCptRendu: json["tableCptRendu"],
+        nature: json["nature"],
+        duree: json["duree"],
+        natureActe: json["natureActe"],
+        bloc: json["bloc"],
+        natureAdmission: json["natureAdmission"],
+        kt: json["kt"],
+        hopital: json["hopital"],
+        numrecept: json["numrecept"],
+        autorisFacturationHonoraire: json["autorisFacturationHonoraire"],
+        indImage: json["indImage"],
+        imgCpt: json["imgCpt"],
+        codMotif: json["codMotif"],
+      );
 }
-

@@ -1,7 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:radiologiev2/app/data/models/CenterModel.dart';
 import 'package:radiologiev2/app/modules/ListComptesRendus/controllers/list_comptes_rendus_controller.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/controllers/rendezvous_controller.dart';
 
@@ -10,7 +9,8 @@ import '../../../data/widgets/NavugationDrawer.dart';
 class ListComptesRendusView extends GetView<ListComptesRendusController> {
   final dateController = TextEditingController();
   final dateController2 = TextEditingController();
-  final CenterController _CenterController = Get.put(CenterController());
+  final RendezvousController rendezvousController =
+      Get.put(RendezvousController());
   String? defaultLocale;
 
   ListComptesRendusView({Key? key}) : super(key: key);
@@ -20,39 +20,50 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
     return Scaffold(
         drawer: NavigationDrawer(),
         appBar: AppBar(
-            backgroundColor: Colors.blueAccent,
-            title: SizedBox(
-              child: Obx(
-                () => DropdownSearch<String>(
-                    mode: Mode.BOTTOM_SHEET,
-                    showSearchBox: true,
-                    items: _CenterController.listCenter
-                        .map((element) => defaultLocale == "ar"
-                            ? element.designCentre.toString()
-                            : element.designCentre!.toString())
-                        .toList(),
-                    popupItemDisabled: (String s) => s.startsWith('I'),
-                    onChanged: (value) => {
-                          _CenterController.listCenter.value.forEach((element) {
-                            if (element.designCentre == value) {
-                              _CenterController.listCenter.value =
-                                  element as List<Centerv>;
-                            }
-                          }),
-                        },
-                    selectedItem: _CenterController.Lcenterv.value.designCentre,
-                    dropdownSearchDecoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(8),
-                      hintText: "Select Center",
-                      hintStyle: const TextStyle(color: Colors.white),
-                      prefixIcon: const Icon(Icons.business),
-                      labelStyle: TextStyle(
-                        color: Get.theme.primaryColor,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    )),
+          backgroundColor: Colors.blueAccent,
+          title: SizedBox(
+            child: Obx(
+              () => DropdownSearch<String>(
+                  mode: Mode.BOTTOM_SHEET,
+                  showSearchBox: true,
+                  items: rendezvousController.listCenter
+                      .map((element) => defaultLocale == "ar"
+                          ? element.designCentre.toString()
+                          : element.designCentre!.toString())
+                      .toList(),
+                  popupItemDisabled: (String s) => s.startsWith('I'),
+                  onChanged: (value) => {
+                        rendezvousController.listCenter.value
+                            .forEach((element) {
+                          if (element.designCentre == value) {
+                            rendezvousController.Lcenterv.value = element;
+                          }
+                        }),
+                      },
+                  selectedItem:
+                      rendezvousController.Lcenterv.value.designCentre,
+                  dropdownSearchDecoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(8),
+                    hintText: "Tous Les Centres",
+                    hintStyle: const TextStyle(color: Colors.white),
+                    prefixIcon: const Icon(Icons.business),
+                    labelStyle: TextStyle(
+                      color: Get.theme.primaryColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )),
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.filter_alt_rounded,
+                color: Colors.white,
               ),
-            )),
+              onPressed: () {},
+            )
+          ],
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(16),

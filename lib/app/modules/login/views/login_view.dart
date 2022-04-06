@@ -10,8 +10,6 @@ class LoginView extends GetView<LoginController> {
   LoginController loginController = Get.put(LoginController());
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final loginFormKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
   bool passwordVisible = false;
 
   @override
@@ -38,7 +36,7 @@ class LoginView extends GetView<LoginController> {
             return Future<bool>.value(false);
           },
           child: Container(
-            height: Get.height - AppBar().preferredSize.height,
+            height: Get.height,
             decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/images/splash2.jpg"),
@@ -63,60 +61,56 @@ class LoginView extends GetView<LoginController> {
                             child: Column(
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                                  child: TextFormField(
-                                    controller: emailController,
-                                    onChanged: (value) {
-                                      ServiceUser.username =
-                                          emailController.text;
-                                      //print("onChanged: "+ServiceUser.username);
-                                    },
-                                    decoration: InputDecoration(
-                                        errorStyle:
-                                            const TextStyle(fontSize: 12.0),
-                                        labelText: ("User name "),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        labelStyle: TextStyle(
-                                          color: Get.theme.primaryColor,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          borderSide: BorderSide(
-                                              color: Get.theme.primaryColor,
-                                              width: 2.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 10, 20, 20),
+                                    child: TextFormField(
+                                      onChanged: (value) {
+                                        ServiceUser.username = value;
+                                        //print("onChanged: "+ServiceUser.username);
+                                      },
+                                      decoration: InputDecoration(
+                                          errorStyle:
+                                              const TextStyle(fontSize: 12.0),
+                                          labelText: ("User name "),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          labelStyle: TextStyle(
+                                            color: Get.theme.primaryColor,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20.0),
                                             borderSide: BorderSide(
                                                 color: Get.theme.primaryColor,
-                                                width: 2.0)),
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                            borderSide: BorderSide(
-                                                color: Get.theme.primaryColor,
-                                                width: 2.0))),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return ("Invalid Email , Please try again");
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                                Obx(() => Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 20, 20),
-                                      child: TextFormField(
-                                        controller: passwordController,
+                                                width: 2.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              borderSide: BorderSide(
+                                                  color: Get.theme.primaryColor,
+                                                  width: 2.0)),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              borderSide: BorderSide(
+                                                  color: Get.theme.primaryColor,
+                                                  width: 2.0))),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return ("Invalid Email , Please try again");
+                                        }
+                                        return null;
+                                      },
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 0, 20, 20),
+                                    child: Obx(
+                                      () => TextFormField(
                                         onChanged: (value) {
-                                          ServiceUser.password =
-                                              passwordController.text;
+                                          ServiceUser.password = value;
                                           //print("onChanged: "+ServiceUser.password);
                                         },
                                         obscureText:
@@ -175,7 +169,7 @@ class LoginView extends GetView<LoginController> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.all(16),
+                                      padding: const EdgeInsets.all(13),
                                       child: Container(
                                         width: 250,
                                         decoration: BoxDecoration(
@@ -195,12 +189,14 @@ class LoginView extends GetView<LoginController> {
                                           ],
                                           color: Colors.white,
                                           borderRadius:
-                                              BorderRadius.circular(30),
+                                              BorderRadius.circular(20),
                                         ),
                                         child: FlatButton(
                                           onPressed: () {
                                             if (loginFormKey.currentState!
-                                                .validate()) {}
+                                                .validate()) {
+                                              loginController.login();
+                                            }
                                           },
                                           child: Wrap(
                                             crossAxisAlignment:
@@ -232,7 +228,7 @@ class LoginView extends GetView<LoginController> {
                                       padding: const EdgeInsets.fromLTRB(
                                           16, 0, 16, 16),
                                       child: Container(
-                                        width: 250,
+                                        width: 210,
                                         decoration: BoxDecoration(
                                           boxShadow: const [
                                             BoxShadow(
@@ -251,13 +247,13 @@ class LoginView extends GetView<LoginController> {
                                           color: const Color.fromRGBO(
                                               9, 153, 165, 1),
                                           borderRadius:
-                                              BorderRadius.circular(30),
+                                              BorderRadius.circular(20),
                                         ),
                                         child: FlatButton(
                                           onPressed: () {
                                             Get.toNamed(Routes.HOME);
                                           },
-                                          child: Text("Change Clinique"),
+                                          child: Text("Changer clinique"),
                                         ),
                                       ),
                                     ),

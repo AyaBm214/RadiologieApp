@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:radiologiev2/app/data/models/OrganismeModel.dart';
 
+import 'ServiceUser.dart';
+
 class ServiceOrganisme {
   Future fetchOrganisme() async {
-    final response = await http
-        .get(Uri.parse('http://192.168.1.242:9015/radiologie/api/societes'));
+    final response = await http.get(
+        Uri.parse(ServiceUser.configuration.url + '/radiologie/api/societes'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       print(parsed);

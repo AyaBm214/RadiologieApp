@@ -19,7 +19,7 @@ class SplashView extends GetView<SplashController> {
       body: Container(
         alignment: Alignment.center,
         child: Image.asset(
-          "assets/images/logo.png",
+          "assets/images/logo2.png",
           height: 200,
           width: 300,
         ),
