@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
@@ -28,12 +30,13 @@ class RendezvousController extends GetxController {
   RxList<Organisme> listOrganisme = <Organisme>[].obs;
   Rx<Organisme> LOrganisme = Organisme().obs;
   final ServiceExam se = ServiceExam();
-  RxList<Exam> listExam = <Exam>[].obs;
+  RxList<Exam> listExam =
+      <Exam>[].obs; //todo baddel [] b list.empty  ok sa7it :)
   Rx<Exam> LExam = Exam().obs;
   final ServiceSalle ss = ServiceSalle();
-  RxList<Salle> listSalle = <Salle>[].obs;
+  RxList<Salle> listSalle = List<Salle>.empty(growable: true).obs;
   Rx<Salle> Lsalle = Salle().obs;
-
+  RxList<Pillar> resources = List<Pillar>.empty(growable: true).obs;
   @override
   void onInit() {
     fetchCenter();
@@ -41,6 +44,53 @@ class RendezvousController extends GetxController {
     fetchOrganisme();
     fetchExam();
     fetchSalle();
+    resources.value = [
+      Pillar(
+        head: PillarHead(
+            title: 'Resource 1', subtitle: '3 Appointments', object: 1),
+        events: [
+          AgendaEvent(
+            title: 'Meeting D',
+            subtitle: 'MD',
+            backgroundColor: Colors.red,
+            start: EventTime(hour: 15, minute: 0),
+            end: EventTime(hour: 16, minute: 30),
+          ),
+          AgendaEvent(
+            title: 'Meeting Z',
+            subtitle: 'MZ',
+            start: EventTime(hour: 12, minute: 0),
+            end: EventTime(hour: 13, minute: 20),
+          ),
+        ],
+      ),
+      Pillar(
+        head: PillarHead(title: 'Resource 2', object: 2),
+        events: [
+          AgendaEvent(
+            title: 'Meeting G',
+            subtitle: 'MG',
+            backgroundColor: Colors.yellowAccent,
+            start: EventTime(hour: 9, minute: 10),
+            end: EventTime(hour: 11, minute: 45),
+          ),
+        ],
+      ),
+      Pillar(
+        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
+        events: [
+          AgendaEvent(
+            title: 'Meeting A',
+            subtitle: 'MA',
+            start: EventTime(hour: 10, minute: 10),
+            end: EventTime(hour: 11, minute: 45),
+            onTap: () {
+              print("meeting A Details");
+            },
+          ),
+        ],
+      ),
+    ];
   }
 
   String? validator(String value) {

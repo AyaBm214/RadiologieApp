@@ -1,10 +1,10 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/models/RendezVousModel.dart';
 import 'package:radiologiev2/app/data/widgets/NavugationDrawer.dart';
 import 'package:radiologiev2/app/data/widgets/RDVForm.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../controllers/rendezvous_controller.dart';
 
@@ -20,6 +20,8 @@ class RendezvousView extends GetView<RendezvousController> {
 
   @override
   Widget build(BuildContext context) {
+    print("**********************************");
+    print(rendezvousController.listSalle);
     return Scaffold(
         drawer: NavigationDrawer(),
         appBar: AppBar(
@@ -78,101 +80,26 @@ class RendezvousView extends GetView<RendezvousController> {
           },
           child: const Icon(Icons.add),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                  child: SizedBox(
-                      width: 600,
-                      child: SafeArea(
-                        child: TextField(
-                          readOnly: true,
-                          controller: dateController,
-                          decoration: InputDecoration(
-                            hintText: "Pick Date",
-                            contentPadding: const EdgeInsets.all(5),
-                            prefixIcon:
-                                const Icon(Icons.calendar_today_outlined),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          onTap: () async {
-                            var date = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2100));
-                            dateController.text =
-                                date.toString().substring(0, 10);
-                          },
-                        ),
-                      ))),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Table(border: TableBorder.all(), children: [
-                  TableRow(
-                    decoration: BoxDecoration(color: Colors.grey[200]),
-                  ),
-                  TableRow(children: [
-                    TableCell(
-                      verticalAlignment: TableCellVerticalAlignment.middle,
-                      child: SfCalendar(
-                        view: CalendarView.week,
-                        headerHeight: 0,
-                        viewHeaderHeight: 0,
-                        selectionDecoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(color: Colors.red, width: 2),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
-                          shape: BoxShape.rectangle,
-                        ),
-                      ),
-                    ),
-                    Column(children: <Widget>[
-                      SizedBox(
-                        child: Obx(
-                          () => DropdownSearch<String>(
-                            mode: Mode.BOTTOM_SHEET,
-                            showSearchBox: true,
-                            items: rendezvousController.listSalle
-                                .map((element) => defaultLocale == "ar"
-                                    ? element.designation.toString()
-                                    : element.designation!.toString())
-                                .toList(),
-                            onChanged: (value) => {
-                              rdv.Salle = value!,
-                              print(value),
-                              rendezvousController.listSalle.value
-                                  .forEach((element) {
-                                if (element.designation == value) {
-                                  rendezvousController.Lsalle.value = element;
-                                }
-                              }),
-                            },
-                            selectedItem:
-                                rendezvousController.Lsalle.value.designation,
-                            dropdownSearchDecoration: InputDecoration(
-                              hintText: "Salle",
-                              contentPadding: const EdgeInsets.all(5),
-                              prefixIcon: const Icon(Icons.forward_rounded),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ])
-                  ])
-                ]),
-              ),
-            )
-          ],
+        body: AgendaView(
+          // the default view is timeItemHeight = 80 the timeline will be shown in 30 min view
+          // and if you  setState it 160 it will be the 15 min view
+          // or you can set it 60 and show an hourly timeline
+          agendaStyle: const AgendaStyle(
+            startHour: 9,
+            endHour: 20,
+            pillarSeperator: false,
+            visibleTimeBorder: true,
+            timeItemWidth: 40,
+            timeItemHeight: 160,
+          ),
+          pillarList: rendezvousController.resources.value,
+          // the click else where (other than an event because it has it's own onTap parameter)
+          // you get the object linked to the head object of the pillar which could be you project costume object
+          // and the cliked time
+          onLongPress: (clickedTime, object) {
+            print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
+            print("Head Object related to the resource: $object");
+          },
         ));
   }
 
@@ -205,3 +132,111 @@ class RendezvousView extends GetView<RendezvousController> {
         });
   }
 }
+/*
+import 'package:flutter/material.dart';
+import 'package:flutter_agenda/flutter_agenda.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: AgendaScreen(),
+    );
+  }
+}
+
+class AgendaScreen extends StatefulWidget {
+  AgendaScreen({Key? key}) : super(key: key);
+
+  @override
+  _AgendaScreenState createState() => _AgendaScreenState();
+}
+
+late List<Pillar> resources = <Pillar>[];
+
+class _AgendaScreenState extends State<AgendaScreen> {
+  @override
+  void initState() {
+    super.initState();
+    resources = [
+      Pillar(
+        head: PillarHead(
+            title: 'Resource 1', subtitle: '3 Appointments', object: 1),
+        events: [
+          AgendaEvent(
+            title: 'Meeting D',
+            subtitle: 'MD',
+            backgroundColor: Colors.red,
+            start: EventTime(hour: 15, minute: 0),
+            end: EventTime(hour: 16, minute: 30),
+          ),
+          AgendaEvent(
+            title: 'Meeting Z',
+            subtitle: 'MZ',
+            start: EventTime(hour: 12, minute: 0),
+            end: EventTime(hour: 13, minute: 20),
+          ),
+        ],
+      ),
+      Pillar(
+        head: PillarHead(title: 'Resource 2', object: 2),
+        events: [
+          AgendaEvent(
+            title: 'Meeting G',
+            subtitle: 'MG',
+            backgroundColor: Colors.yellowAccent,
+            start: EventTime(hour: 9, minute: 10),
+            end: EventTime(hour: 11, minute: 45),
+          ),
+        ],
+      ),
+      Pillar(
+        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
+        events: [
+          AgendaEvent(
+            title: 'Meeting A',
+            subtitle: 'MA',
+            start: EventTime(hour: 10, minute: 10),
+            end: EventTime(hour: 11, minute: 45),
+            onTap: () {
+              print("meeting A Details");
+            },
+          ),
+        ],
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: AgendaView(
+          // the default view is timeItemHeight = 80 the timeline will be shown in 30 min view
+          // and if you  setState it 160 it will be the 15 min view
+          // or you can set it 60 and show an hourly timeline
+          agendaStyle: AgendaStyle(
+            startHour: 9,
+            endHour: 20,
+            pillarSeperator: false,
+            visibleTimeBorder: true,
+            timeItemWidth: 40,
+            timeItemHeight: 160,
+          ),
+          pillarList: resources,
+          // the click else where (other than an event because it has it's own onTap parameter)
+          // you get the object linked to the head object of the pillar which could be you project costume object
+          // and the cliked time
+          onLongPress: (clickedTime, object) {
+            print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
+            print("Head Object related to the resource: $object");
+          },
+        ),
+      ),
+    );
+  }
+}*/

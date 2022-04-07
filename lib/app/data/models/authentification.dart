@@ -1,7 +1,7 @@
 class Authentification {
-  late String username;
-  late String NomClinique;
-  late String url;
+  String username = "";
+  String NomClinique = "";
+  String url = "";
 
   String get getNomClinique => NomClinique;
 

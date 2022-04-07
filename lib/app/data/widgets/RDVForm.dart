@@ -16,13 +16,23 @@ class FormulaireView extends GetView<RendezvousController> {
       Get.put(RendezvousController());
   final RendezVous rdv = RendezVous();
   String? defaultLocale;
-  final dateRdvController = TextEditingController();
-  final dateBirthController = TextEditingController();
+  TextEditingController dateRdvController = TextEditingController();
+  TextEditingController dateBirthController = TextEditingController();
   TextEditingController timeinput = TextEditingController();
   TextEditingController Dateinput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    dateBirthController.text = DateTime.now().weekday.toString() +
+        "-" +
+        DateTime.now().month.toString() +
+        "-" +
+        DateTime.now().year.toString();
+    dateRdvController.text = DateTime.now().weekday.toString() +
+        "-" +
+        DateTime.now().month.toString() +
+        "-" +
+        DateTime.now().year.toString();
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -324,6 +334,7 @@ class FormulaireView extends GetView<RendezvousController> {
                     padding: const EdgeInsets.all(12),
                     child: SizedBox(
                       child: Obx(
+                        //todo ====> multiple select dropdow
                         () => DropdownSearch<String>(
                             mode: Mode.BOTTOM_SHEET,
                             showSearchBox: true,
@@ -383,12 +394,13 @@ class FormulaireView extends GetView<RendezvousController> {
                               child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter some text';
+                                    return 'Veuillez choisir date rendez vous';
                                   }
                                   return null;
                                 },
                                 readOnly: true,
-                                controller: dateBirthController,
+                                //todo change name of controller datebirth -_-
+                                controller: dateRdvController,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5),
                                     hintText: " Date Rdv",
@@ -412,13 +424,26 @@ class FormulaireView extends GetView<RendezvousController> {
                                         borderSide: BorderSide(
                                           color: Colors.white,
                                         ))),
+
+                                /*initialValue:
+                                    DateTime.now().weekday.toString() +
+                                        "-" +
+                                        DateTime.now().month.toString() +
+                                        "-" +
+                                        DateTime.now().year.toString(),*/
                                 onTap: () async {
                                   DatePicker.showDatePicker(context,
                                       showTitleActions: true,
-                                      minTime: DateTime(2000, 3, 5),
+                                      minTime: DateTime.now(),
                                       maxTime: DateTime(2025, 6, 7),
                                       onChanged: (date) {
                                     rdv.Daterdv = date;
+                                    dateRdvController.text =
+                                        date.weekday.toString() +
+                                            "-" +
+                                            date.month.toString() +
+                                            "-" +
+                                            date.year.toString();
                                     print(date);
                                   }, onConfirm: (date) {
                                     rdv.Daterdv = date;
@@ -716,7 +741,9 @@ class FormulaireView extends GetView<RendezvousController> {
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
+                    controller: dateBirthController,
                     onChanged: (value) {
+                      dateBirthController.text = value.toString();
                       print(value);
                     },
                     validator: (value) {
