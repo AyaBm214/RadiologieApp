@@ -18,8 +18,7 @@ class FormulaireView extends GetView<RendezvousController> {
   String? defaultLocale;
   TextEditingController dateRdvController = TextEditingController();
   TextEditingController dateBirthController = TextEditingController();
-  TextEditingController timeinput = TextEditingController();
-  TextEditingController Dateinput = TextEditingController();
+  TextEditingController timerdv = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -399,7 +398,6 @@ class FormulaireView extends GetView<RendezvousController> {
                                   return null;
                                 },
                                 readOnly: true,
-                                //todo change name of controller datebirth -_-
                                 controller: dateRdvController,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5),
@@ -424,17 +422,10 @@ class FormulaireView extends GetView<RendezvousController> {
                                         borderSide: BorderSide(
                                           color: Colors.white,
                                         ))),
-
-                                /*initialValue:
-                                    DateTime.now().weekday.toString() +
-                                        "-" +
-                                        DateTime.now().month.toString() +
-                                        "-" +
-                                        DateTime.now().year.toString(),*/
                                 onTap: () async {
                                   DatePicker.showDatePicker(context,
                                       showTitleActions: true,
-                                      minTime: DateTime.now(),
+                                      minTime: DateTime(1998, 1, 1),
                                       maxTime: DateTime(2025, 6, 7),
                                       onChanged: (date) {
                                     rdv.Daterdv = date;
@@ -463,7 +454,7 @@ class FormulaireView extends GetView<RendezvousController> {
                                 child: SafeArea(
                                     child: TextField(
                                   controller:
-                                      timeinput, //editing controller of this TextField
+                                      timerdv, //editing controller of this TextField
                                   decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.all(5),
                                       hintText: " Heure",
@@ -512,7 +503,7 @@ class FormulaireView extends GetView<RendezvousController> {
                                       print(formattedTime); //output 14:59:00
                                       //DateFormat() is from intl package, you can format the time on any pattern you need.
                                       {
-                                        timeinput.text =
+                                        timerdv.text =
                                             formattedTime; //set the value of text field.
                                       }
                                       ;
@@ -521,8 +512,8 @@ class FormulaireView extends GetView<RendezvousController> {
                                     }
                                   },
                                   onChanged: (value) {
-                                    rdv.Heurerdv = DateTime.parse(value);
-                                    print("ccc $value");
+                                    rdv.Heurerdv = value as DateTime?;
+                                    print(value);
                                   },
                                 ))),
                           ),
@@ -742,10 +733,6 @@ class FormulaireView extends GetView<RendezvousController> {
                   padding: const EdgeInsets.all(12),
                   child: TextFormField(
                     controller: dateBirthController,
-                    onChanged: (value) {
-                      dateBirthController.text = value.toString();
-                      print(value);
-                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter some text';
@@ -758,25 +745,27 @@ class FormulaireView extends GetView<RendezvousController> {
                         hintText: " Date of Birth",
                         hintStyle: const TextStyle(color: Colors.blueGrey),
                         prefixIcon: const Icon(Icons.calendar_today_outlined),
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w700,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
                           borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                              const BorderSide(color: Colors.white, width: 1.0),
                         ),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 1.0))),
+                            borderSide: const BorderSide(
+                                color: Colors.white, width: 1.0))),
                     onTap: () async {
                       DatePicker.showDatePicker(context,
                           showTitleActions: true,
                           minTime: DateTime(2000, 3, 5),
-                          maxTime: DateTime(2025, 6, 7),
-                          onChanged: (date) {}, onConfirm: (date) {
+                          maxTime: DateTime(2025, 6, 7), onChanged: (date) {
+                        rdv.Datebirth = date;
+                        print(date);
+                      }, onConfirm: (date) {
                         print('confirm $date');
                       }, currentTime: DateTime.now(), locale: LocaleType.en);
                     },

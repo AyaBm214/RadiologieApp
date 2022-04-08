@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
 import 'package:radiologiev2/app/data/Services/ServiceExam.dart';
 import 'package:radiologiev2/app/data/Services/ServiceMedcin.dart';
@@ -17,26 +16,26 @@ import 'package:radiologiev2/app/data/models/SalleModel.dart';
 
 class RendezvousController extends GetxController {
   final ServiceCenter _serviceCenter = ServiceCenter();
-  RxList<Centerv> listCenter = <Centerv>[].obs;
+  RxList<Centerv> listCenter = List<Centerv>.empty(growable: true).obs;
   Rx<Centerv> Lcenterv = Centerv().obs;
   final ServiceMedecin service_medecin = ServiceMedecin();
-  RxList<Medecin> listMedecin = <Medecin>[].obs;
-  RxList<Medecin> listMedecinP = <Medecin>[].obs;
-  RxList<Medecin> listMedecinM = <Medecin>[].obs;
+  RxList<Medecin> listMedecin = List<Medecin>.empty(growable: true).obs;
+  RxList<Medecin> listMedecinP = List<Medecin>.empty(growable: true).obs;
+  RxList<Medecin> listMedecinM = List<Medecin>.empty(growable: true).obs;
   Rx<Medecin> LMedecin = Medecin(codMed: '').obs;
   Rx<Medecin> LMedecinP = Medecin(codMed: '').obs;
   Rx<Medecin> LMedecinM = Medecin(codMed: '').obs;
   final ServiceOrganisme so = ServiceOrganisme();
-  RxList<Organisme> listOrganisme = <Organisme>[].obs;
+  RxList<Organisme> listOrganisme = List<Organisme>.empty(growable: true).obs;
   Rx<Organisme> LOrganisme = Organisme().obs;
   final ServiceExam se = ServiceExam();
-  RxList<Exam> listExam =
-      <Exam>[].obs; //todo baddel [] b list.empty  ok sa7it :)
+  RxList<Exam> listExam = List<Exam>.empty(growable: true).obs;
   Rx<Exam> LExam = Exam().obs;
   final ServiceSalle ss = ServiceSalle();
   RxList<Salle> listSalle = List<Salle>.empty(growable: true).obs;
   Rx<Salle> Lsalle = Salle().obs;
   RxList<Pillar> resources = List<Pillar>.empty(growable: true).obs;
+
   @override
   void onInit() {
     fetchCenter();
@@ -46,8 +45,7 @@ class RendezvousController extends GetxController {
     fetchSalle();
     resources.value = [
       Pillar(
-        head: PillarHead(
-            title: 'Resource 1', subtitle: '3 Appointments', object: 1),
+        head: PillarHead(title: 'Salle'),
         events: [
           AgendaEvent(
             title: 'Meeting D',
@@ -61,32 +59,6 @@ class RendezvousController extends GetxController {
             subtitle: 'MZ',
             start: EventTime(hour: 12, minute: 0),
             end: EventTime(hour: 13, minute: 20),
-          ),
-        ],
-      ),
-      Pillar(
-        head: PillarHead(title: 'Resource 2', object: 2),
-        events: [
-          AgendaEvent(
-            title: 'Meeting G',
-            subtitle: 'MG',
-            backgroundColor: Colors.yellowAccent,
-            start: EventTime(hour: 9, minute: 10),
-            end: EventTime(hour: 11, minute: 45),
-          ),
-        ],
-      ),
-      Pillar(
-        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
-        events: [
-          AgendaEvent(
-            title: 'Meeting A',
-            subtitle: 'MA',
-            start: EventTime(hour: 10, minute: 10),
-            end: EventTime(hour: 11, minute: 45),
-            onTap: () {
-              print("meeting A Details");
-            },
           ),
         ],
       ),
@@ -155,23 +127,4 @@ class RendezvousController extends GetxController {
       listSalle.value = Salles;
     }
   }
-}
-
-setSelectedCentre(value) {}
-
-calculateAge(DateTime birthDate) {
-  DateTime currentDate = DateTime.now();
-  int age = currentDate.year - birthDate.year;
-  int month1 = currentDate.month;
-  int month2 = birthDate.month;
-  if (month2 > month1) {
-    age--;
-  } else if (month1 == month2) {
-    int day1 = currentDate.day;
-    int day2 = birthDate.day;
-    if (day2 > day1) {
-      age--;
-    }
-  }
-  return age;
 }

@@ -33,6 +33,7 @@ class RendezVous {
     this.prenom,
     this.Daterdv,
     this.Heurerdv,
+    Datebirth,
   });
 
   String? codeCentre;
@@ -54,6 +55,7 @@ class RendezVous {
   String? nomCli;
   String? prenom;
   DateTime? Daterdv;
+  DateTime? Datebirth;
   DateTime? Heurerdv;
 
   factory RendezVous.fromJson(Map<String, dynamic> json) => RendezVous(
@@ -77,6 +79,7 @@ class RendezVous {
         prenom: json["prenom"],
         Daterdv: json["Daterdv"],
         Heurerdv: json["Heurerdv"],
+        Datebirth: json["Datebirth"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -100,11 +103,12 @@ class RendezVous {
         "prenom": prenom,
         "Daterdv": Daterdv,
         "Heurerdv": Heurerdv,
+        "Datebirth": Datebirth,
       };
 
   @override
   String toString() {
-    return 'RendezVous{codeCentre: $codeCentre, designCentre: $Centre, dessalle: $Salle, medecinM: $medecinM, medecinP: $medecinP, objet: $objet, Daterdv: $Daterdv , Heurerdv: $Heurerdv, email: $email, organisme: $organisme, telperson: $telperson, tel: $tel, codeMed: $codeMed, codeSalle: $codeSalle, designation: $designation, designationExam: $Exam, id: $id, listRdvAndPk: ${listRdvAndPk.toString()}, nomCli: $nomCli, prenom: $prenom}';
+    return 'RendezVous{codeCentre: $codeCentre, designCentre: $Centre, dessalle: $Salle, medecinM: $medecinM, medecinP: $medecinP, objet: $objet, Daterdv: $Daterdv , Heurerdv: $Heurerdv, email: $email, organisme: $organisme, telperson: $telperson, tel: $tel, codeMed: $codeMed, codeSalle: $codeSalle, designation: $designation, designationExam: $Exam, id: $id, listRdvAndPk: ${listRdvAndPk.toString()}, nomCli: $nomCli, prenom: $prenom , Datebirth:$Datebirth}';
   }
 }
 
