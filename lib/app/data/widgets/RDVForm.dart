@@ -1,4 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:get/get.dart';
@@ -18,20 +19,12 @@ class FormulaireView extends GetView<RendezvousController> {
   String? defaultLocale;
   TextEditingController dateRdvController = TextEditingController();
   TextEditingController dateBirthController = TextEditingController();
+  TextEditingController heurerdvController = TextEditingController();
+
   TextEditingController timerdv = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    dateBirthController.text = DateTime.now().weekday.toString() +
-        "-" +
-        DateTime.now().month.toString() +
-        "-" +
-        DateTime.now().year.toString();
-    dateRdvController.text = DateTime.now().weekday.toString() +
-        "-" +
-        DateTime.now().month.toString() +
-        "-" +
-        DateTime.now().year.toString();
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -50,9 +43,9 @@ class FormulaireView extends GetView<RendezvousController> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Save and Exit?'),
-                            content: const Text(
-                                'are you sure you want to save and exit?'),
+                            title: const Text('Exit?'),
+                            content:
+                                const Text('are you sure you want to  exit?'),
                             actions: [
                               GestureDetector(
                                 child: TextButton(
@@ -92,7 +85,7 @@ class FormulaireView extends GetView<RendezvousController> {
                             Get.snackbar(
                                 'Confirmation', 'RendezVous Confirmée ',
                                 snackPosition: SnackPosition.BOTTOM);
-                            Get.toNamed(Routes.RENDEZVOUS);
+                            Get.toNamed(Routes.LIST_COMPTES_RENDUS);
                           }
                         } else {
                           Get.snackbar('Error', 'RendezVous non Confirmée',
@@ -384,141 +377,76 @@ class FormulaireView extends GetView<RendezvousController> {
                     )),
                 Container(
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                            width: 170,
-                            child: SafeArea(
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Veuillez choisir date rendez vous';
-                                  }
-                                  return null;
-                                },
-                                readOnly: true,
-                                controller: dateRdvController,
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(5),
-                                    hintText: " Date Rdv",
-                                    hintStyle:
-                                        const TextStyle(color: Colors.blueGrey),
-                                    prefixIcon:
-                                        const Icon(Icons.calendar_today),
-                                    labelStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        borderSide: BorderSide(
-                                          color: Colors.white,
-                                        ))),
-                                onTap: () async {
-                                  DatePicker.showDatePicker(context,
-                                      showTitleActions: true,
-                                      minTime: DateTime(1998, 1, 1),
-                                      maxTime: DateTime(2025, 6, 7),
-                                      onChanged: (date) {
-                                    rdv.Daterdv = date;
-                                    dateRdvController.text =
-                                        date.weekday.toString() +
-                                            "-" +
-                                            date.month.toString() +
-                                            "-" +
-                                            date.year.toString();
-                                    print(date);
-                                  }, onConfirm: (date) {
-                                    rdv.Daterdv = date;
-                                    print(date);
-                                  },
-                                      currentTime: DateTime.now(),
-                                      locale: LocaleType.en);
-                                },
+                    padding: const EdgeInsets.all(12),
+                    child: SizedBox(
+                        child: SafeArea(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Veuillez choisir date rendez vous';
+                          }
+                          return null;
+                        },
+                        readOnly: true,
+                        controller: dateRdvController,
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(5),
+                            hintText: " Date rdv",
+                            hintStyle: const TextStyle(color: Colors.blueGrey),
+                            prefixIcon: const Icon(Icons.calendar_today),
+                            labelStyle: TextStyle(
+                              color: Get.theme.primaryColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                color: Get.theme.primaryColor,
                               ),
-                            )),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: SizedBox(
-                                width: 150,
-                                child: SafeArea(
-                                    child: TextField(
-                                  controller:
-                                      timerdv, //editing controller of this TextField
-                                  decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.all(5),
-                                      hintText: " Heure",
-                                      hintStyle: const TextStyle(
-                                          color: Colors.blueGrey),
-                                      prefixIcon: const Icon(Icons.timer),
-                                      labelStyle: TextStyle(
-                                        color: Get.theme.primaryColor,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        borderSide: BorderSide(
-                                          color: Get.theme.primaryColor,
-                                        ),
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          borderSide: BorderSide(
-                                            color: Get.theme.primaryColor,
-                                          ))),
-                                  readOnly:
-                                      true, //set it true, so that user will not able to edit text
-                                  onTap: () async {
-                                    TimeOfDay? pickedTime =
-                                        await showTimePicker(
-                                      initialTime: TimeOfDay.now(),
-                                      context: context,
-                                    );
-
-                                    if (pickedTime != null) {
-                                      print(pickedTime
-                                          .format(context)); //output 10:51 PM
-                                      DateTime parsedTime = DateFormat.jm()
-                                          .parse(pickedTime
-                                              .format(context)
-                                              .toString());
-                                      //converting to DateTime so that we can further format on different pattern.
-                                      print(
-                                          parsedTime); //output 1970-01-01 22:53:00.000
-                                      String formattedTime =
-                                          DateFormat('HH:mm:ss')
-                                              .format(parsedTime);
-                                      print(formattedTime); //output 14:59:00
-                                      //DateFormat() is from intl package, you can format the time on any pattern you need.
-                                      {
-                                        timerdv.text =
-                                            formattedTime; //set the value of text field.
-                                      }
-                                      ;
-                                    } else {
-                                      print("Time is not selected");
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    rdv.Heurerdv = value as DateTime?;
-                                    print(value);
-                                  },
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Get.theme.primaryColor,
                                 ))),
-                          ),
-                        ),
-                      ],
+                        onTap: () async {
+                          DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime.now(),
+                              maxTime: DateTime(2025, 6, 7), onChanged: (date) {
+                            rdv.Daterdv = date;
+                            dateRdvController.text = date.weekday.toString() +
+                                "-" +
+                                date.month.toString() +
+                                "-" +
+                                date.year.toString();
+                            print(date);
+                          }, onConfirm: (date) {
+                            rdv.Daterdv = date;
+                            print(date);
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+                        },
+                      ),
+                    ))),
+                Container(
+                    height: 200,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(12),
+                    child: SizedBox(
+                      child: CupertinoDatePicker(
+                        mode: CupertinoDatePickerMode.time,
+                        initialDateTime: DateTime(11, 33),
+                        onDateTimeChanged: (DateTime newDateTime) {
+                          rdv.Heurerdv = newDateTime;
+                          heurerdvController.text =
+                              DateFormat.HOUR24_MINUTE_SECOND;
+                          print(newDateTime);
+                        },
+                        use24hFormat: true,
+                        minuteInterval: 1,
+                      ),
                     )),
                 Container(
                   alignment: Alignment.center,
@@ -560,7 +488,6 @@ class FormulaireView extends GetView<RendezvousController> {
                       onChanged: (value) {
                         rdv.prenom = value;
                         print(value);
-                        //print("onChanged: "+ServiceUser.username);
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -741,23 +668,25 @@ class FormulaireView extends GetView<RendezvousController> {
                     },
                     readOnly: true,
                     decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(10),
+                        contentPadding: const EdgeInsets.all(5),
                         hintText: " Date of Birth",
                         hintStyle: const TextStyle(color: Colors.blueGrey),
                         prefixIcon: const Icon(Icons.calendar_today_outlined),
-                        labelStyle: const TextStyle(
-                          color: Colors.black,
+                        labelStyle: TextStyle(
+                          color: Get.theme.primaryColor,
                           fontWeight: FontWeight.w700,
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 1.0),
+                          borderSide: BorderSide(
+                            color: Get.theme.primaryColor,
+                          ),
                         ),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20.0),
-                            borderSide: const BorderSide(
-                                color: Colors.white, width: 1.0))),
+                            borderSide: BorderSide(
+                              color: Get.theme.primaryColor,
+                            ))),
                     onTap: () async {
                       DatePicker.showDatePicker(context,
                           showTitleActions: true,
@@ -767,6 +696,12 @@ class FormulaireView extends GetView<RendezvousController> {
                         print(date);
                       }, onConfirm: (date) {
                         print('confirm $date');
+                        dateBirthController.text = date.weekday.toString() +
+                            "-" +
+                            date.month.toString() +
+                            "-" +
+                            date.year.toString();
+                        print(date);
                       }, currentTime: DateTime.now(), locale: LocaleType.en);
                     },
                   ),

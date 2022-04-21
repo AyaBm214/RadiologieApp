@@ -17,7 +17,6 @@ class NavigationDrawer extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text('Admin'),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
                   ? Colors.blue
@@ -25,14 +24,18 @@ class NavigationDrawer extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   text: ServiceUser.username,
-                  style: TextStyle(
-                      color: const Color.fromRGBO(4, 116, 124, 1),
+                  style: const TextStyle(
+                      color: Color.fromRGBO(4, 116, 124, 1),
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
               ),
             ),
             accountEmail: null,
+            accountName: Text(
+              ServiceUser.configuration.NomClinique,
+              style: TextStyle(),
+            ),
           ),
           ListTile(
             trailing: const Icon(Icons.file_copy),
@@ -51,7 +54,6 @@ class NavigationDrawer extends StatelessWidget {
             title: const Text("Exploitation"),
             onTap: () {
               Navigator.of(context).pop();
-
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => HomeView()));
             },

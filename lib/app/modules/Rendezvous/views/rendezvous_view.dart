@@ -81,9 +81,6 @@ class RendezvousView extends GetView<RendezvousController> {
           child: const Icon(Icons.add),
         ),
         body: AgendaView(
-          // the default view is timeItemHeight = 80 the timeline will be shown in 30 min view
-          // and if you  setState it 160 it will be the 15 min view
-          // or you can set it 60 and show an hourly timeline
           agendaStyle: const AgendaStyle(
             startHour: 9,
             endHour: 20,
@@ -93,9 +90,6 @@ class RendezvousView extends GetView<RendezvousController> {
             timeItemHeight: 160,
           ),
           pillarList: rendezvousController.resources.value,
-          // the click else where (other than an event because it has it's own onTap parameter)
-          // you get the object linked to the head object of the pillar which could be you project costume object
-          // and the cliked time
           onLongPress: (clickedTime, object) {
             print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
             print("Head Object related to the resource: $object");

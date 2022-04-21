@@ -28,7 +28,7 @@ class ServiceUser extends GetConnect {
           ""),
       headers: <String, String>{"Accept": "*/*"},
     ).timeout(const Duration(seconds: 20));
-    print(response);
+    print(response.toString());
     print("code" + response.statusCode.toString());
     print("omg" + response.body);
     if (response.statusCode == 200 && response.body.isNotEmpty) {

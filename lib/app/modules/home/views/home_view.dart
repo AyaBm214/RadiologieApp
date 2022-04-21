@@ -12,7 +12,7 @@ class HomeView extends GetView<HomeController> {
   @override
   HomeController homeController = Get.put(HomeController());
   final WebService cliniqueWebServices = WebService();
-  late List<clinique> listClinique;
+  late List<Clinique> listClinique;
 
   bool isSearching = false;
 
@@ -43,6 +43,7 @@ class HomeView extends GetView<HomeController> {
               : TextField(
                   onChanged: (value) => homeController.searchClinique(value),
                   style: const TextStyle(color: Colors.black),
+                  autofocus: true,
                   decoration: const InputDecoration(
                     icon: Icon(
                       Icons.search,
@@ -116,14 +117,13 @@ class HomeView extends GetView<HomeController> {
         physics: const ScrollPhysics(),
         itemCount: homeController.Cliniquetrouve.length,
         itemBuilder: (BuildContext context, int index) {
-          // ignore: unused_local_variable
-          clinique cliniques = homeController.Cliniquetrouve[index];
+          Clinique cliniques = homeController.Cliniquetrouve[index];
           return Card(
             child: InkWell(
               onTap: () {
                 homeController.configuration.NomCliniqueset = cliniques.nom!;
                 homeController.configuration.url = cliniques.url!;
-                ServiceUser.configuration.NomCliniqueset = cliniques.nom!;
+                ServiceUser.configuration.NomClinique = cliniques.nom!;
                 ServiceUser.configuration.url = cliniques.url!;
                 ServiceUser.configuration.username = "";
                 Get.offAll(LoginView());

@@ -45,7 +45,7 @@ class RendezvousController extends GetxController {
     fetchSalle();
     resources.value = [
       Pillar(
-        head: PillarHead(title: 'Salle'),
+        head: PillarHead(title: 'Salle', object: 1),
         events: [
           AgendaEvent(
             title: 'Meeting D',
@@ -59,6 +59,32 @@ class RendezvousController extends GetxController {
             subtitle: 'MZ',
             start: EventTime(hour: 12, minute: 0),
             end: EventTime(hour: 13, minute: 20),
+          ),
+        ],
+      ),
+      Pillar(
+        head: PillarHead(title: 'Resource 2', object: 2),
+        events: [
+          AgendaEvent(
+            title: 'Meeting G',
+            subtitle: 'MG',
+            backgroundColor: Colors.yellowAccent,
+            start: EventTime(hour: 9, minute: 10),
+            end: EventTime(hour: 11, minute: 45),
+          ),
+        ],
+      ),
+      Pillar(
+        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
+        events: [
+          AgendaEvent(
+            title: 'Meeting A',
+            subtitle: 'MA',
+            start: EventTime(hour: 10, minute: 10),
+            end: EventTime(hour: 11, minute: 45),
+            onTap: () {
+              print("meeting A Details");
+            },
           ),
         ],
       ),

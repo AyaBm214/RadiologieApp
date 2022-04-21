@@ -17,6 +17,8 @@ class LoginView extends GetView<LoginController> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Get.theme.primaryColor,
+          centerTitle: true,
+          title: Text(ServiceUser.configuration.NomClinique),
           elevation: 0.0,
           leading: Builder(
             builder: (BuildContext context) {
