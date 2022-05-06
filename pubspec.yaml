@@ -11,6 +11,8 @@ dependencies:
   intl_phone_field: ^3.0.1
   dropdown_search: ^2.0.1
   datetime_picker_formfield: ^2.0.0
+  flutter_slidable: ^1.2.0
+
   time_planner: ^0.0.4
   get: ^4.6.1
   xml: ^5.3.1
