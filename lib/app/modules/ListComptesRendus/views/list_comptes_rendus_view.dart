@@ -1,9 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:radiologiev2/app/data/models/CompteRmodel.dart';
 import 'package:radiologiev2/app/data/widgets/EtatWidget.dart';
+import 'package:radiologiev2/app/data/widgets/ListCRendu.dart';
 import 'package:radiologiev2/app/modules/ListComptesRendus/controllers/list_comptes_rendus_controller.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/controllers/rendezvous_controller.dart';
 
@@ -15,11 +14,8 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
   final RendezvousController rendezvousController =
       Get.put(RendezvousController());
   String? defaultLocale;
-  late final CompteRendu compte;
   ListComptesRendusController CompteController =
       Get.put(ListComptesRendusController());
-
-  ListComptesRendusView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,82 +66,91 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
           )
         ],
       ),
-      body: ListView(
-        children: [
-          Slidable(
-            // Specify a key if the Slidable is dismissible.
-            key: const ValueKey(0),
-
-            // The start action pane is the one at the left or the top side.
-            startActionPane: ActionPane(
-              // A motion is a widget used to control how the pane animates.
-              motion: const ScrollMotion(),
-
-              // A pane can dismiss the Slidable.
-              dismissible: DismissiblePane(onDismissed: () {}),
-
-              // All actions are defined in the children parameter.
-              children: const [
-                // A SlidableAction can have an icon and/or a label.
-                SlidableAction(
-                  onPressed: doNothing,
-                  backgroundColor: Color(0xFFFE4A49),
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: 'Delete',
-                ),
-                SlidableAction(
-                  onPressed: doNothing,
-                  backgroundColor: Color(0xFF21B7CA),
-                  foregroundColor: Colors.white,
-                  icon: Icons.share,
-                  label: 'Share',
-                ),
-              ],
-            ),
-            endActionPane: const ActionPane(
-              motion: ScrollMotion(),
+      body: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SlidableAction(
-                  // An action can be bigger than the others.
-                  flex: 2,
-                  onPressed: doNothing,
-                  backgroundColor: Color(0xFF7BC043),
-                  foregroundColor: Colors.white,
-                  icon: Icons.archive,
-                  label: 'Archive',
-                ),
-                SlidableAction(
-                  onPressed: doNothing,
-                  backgroundColor: Color(0xFF0392CF),
-                  foregroundColor: Colors.white,
-                  icon: Icons.save,
-                  label: 'Save',
-                ),
+                SizedBox(
+                    width: 120,
+                    child: SafeArea(
+                      child: TextField(
+                        readOnly: true,
+                        controller: datearrivee,
+                        decoration: InputDecoration(
+                          hintText: 'Pick your Date',
+                          contentPadding: const EdgeInsets.all(5),
+                          prefixIcon: const Icon(Icons.calendar_today_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        onTap: () async {
+                          var date = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime(2100));
+                          datearrivee.text = date.toString().substring(0, 10);
+                        },
+                      ),
+                    )),
+                SizedBox(
+                    width: 120,
+                    child: SafeArea(
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        readOnly: true,
+                        controller: datesortie,
+                        decoration: InputDecoration(
+                          hintText: 'Pick your Date',
+                          contentPadding: const EdgeInsets.all(5),
+                          prefixIcon: const Icon(Icons.calendar_today_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        onTap: () async {
+                          var date = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime(2100));
+                          datesortie.text = date.toString().substring(0, 10);
+                        },
+                      ),
+                    )),
               ],
-            ),
-            child: Card(
-              elevation: 5,
-              child: ListTile(
-                leading: CircleAvatar(
-                  radius: 50.0,
-                  backgroundImage: NetworkImage(
-                      "https://cdn5.vectorstock.com/i/1000x1000/58/49/man-character-avatar-in-flat-design-vector-12015849.jpg"),
-                  backgroundColor: Colors.transparent,
-                ),
-                title: Text('Numéro du Dossier'),
-                subtitle: Text('Détails'),
-                trailing: Icon(
-                  Icons.done_all,
-                  color: Colors.greenAccent,
-                ),
-              ),
             ),
           ),
+          Expanded(
+              child: FutureBuilder(
+                  future: CompteController.fetchCompteRendu(),
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasError) {
+                      print("snapshotError $snapshot.error");
+                      return const Center(
+                        child: Text(
+                          "Impossible de récupere la liste",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromRGBO(0, 147, 189, 0.9),
+                          ),
+                        ),
+                      );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return buildListCompteRendu();
+                    } else {
+                      return const Center(
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                  })),
         ],
       ),
     );
   }
 }
-
-void doNothing(BuildContext context) {}

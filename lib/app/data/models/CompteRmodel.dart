@@ -11,194 +11,194 @@ String compteRenduToJson(CompteRendu data) => json.encode(data.toJson());
 
 class CompteRendu {
   CompteRendu({
-    this.arriveCentre,
-    this.arrivee,
-    this.cdeMedPres,
-    this.centre,
-    this.codeCentre,
-    this.codeSalle,
-    this.cptEncours,
-    required this.datNai,
-    required this.date,
-    this.dateExecution,
-    required this.dateImp,
+    required this.listCompteRenduAndPk,
+    this.v,
+    this.nDossier,
+    this.patient,
+    this.datNai,
+    this.sex,
     this.designation,
+    this.observ,
+    this.date,
+    this.heure,
+    this.medecinDictee,
+    this.cdeMedPres,
+    this.codeCentre,
+    this.centre,
+    this.codeSalle,
+    this.salle,
+    this.identifiant,
+    this.termine,
+    this.entreeSalle,
+    this.sortieSalle,
+    this.dureeAttente,
+    this.dureeensalle,
+    this.dureeattenteArriv,
+    this.dureeEnSalleEnMinute,
+    this.validerMedDictee,
+    this.typeExamen,
+    this.resultat,
+    this.facture,
+    this.dateImp,
+    this.imprimer,
+    this.dateExecution,
+    this.livre,
     this.dicte,
     this.dicteEnCours,
-    this.dureeAttente,
-    this.dureeEnSalleEnMinute,
-    this.dureeattenteArriv,
-    this.dureeensalle,
-    this.enSalle,
-    required this.entreeSalle,
-    this.etat,
-    this.facture,
+    this.arriveCentre,
+    this.rensClin,
     this.hasHist,
     this.hasimgRadio,
-    required this.heure,
-    this.identifiant,
-    this.imprimer,
-    this.listCompteRenduAndPk,
-    this.livre,
-    this.medPres,
-    this.medecinDictee,
-    this.nDossier,
-    this.ndossier,
-    this.observ,
-    this.patient,
+    this.arrivee,
     this.prepare,
-    this.rensClin,
-    this.resultat,
-    this.salle,
-    this.sex,
-    this.sortieSalle,
-    this.termine,
-    this.typeExamen,
-    this.v,
-    this.validerMedDictee,
+    this.enSalle,
+    this.cptEncours,
+    this.etat,
+    this.ndossier,
+    this.medPres,
   });
 
-  DateTime? arriveCentre;
-  bool? arrivee;
-  String? cdeMedPres;
-  String? centre;
-  String? codeCentre;
-  int? codeSalle;
-  bool? cptEncours;
-  DateTime datNai;
-  DateTime date;
-  String? dateExecution;
-  DateTime dateImp;
-  String? designation;
+  ListCompteRenduAndPk listCompteRenduAndPk;
+  bool? v;
+  dynamic nDossier;
+  dynamic patient;
+  dynamic datNai;
+  bool? sex;
+  dynamic designation;
+  dynamic observ;
+  dynamic date;
+  dynamic heure;
+  dynamic medecinDictee;
+  dynamic cdeMedPres;
+  dynamic codeCentre;
+  dynamic centre;
+  dynamic codeSalle;
+  dynamic salle;
+  dynamic identifiant;
+  bool? termine;
+  dynamic entreeSalle;
+  dynamic sortieSalle;
+  dynamic dureeAttente;
+  dynamic dureeensalle;
+  dynamic dureeattenteArriv;
+  dynamic dureeEnSalleEnMinute;
+  bool? validerMedDictee;
+  dynamic typeExamen;
+  bool? resultat;
+  bool? facture;
+  dynamic dateImp;
+  bool? imprimer;
+  dynamic dateExecution;
+  bool? livre;
   bool? dicte;
   bool? dicteEnCours;
-  String? dureeAttente;
-  int? dureeEnSalleEnMinute;
-  String? dureeattenteArriv;
-  String? dureeensalle;
-  bool? enSalle;
-  DateTime entreeSalle;
-  String? etat;
-  bool? facture;
+  dynamic arriveCentre;
+  dynamic rensClin;
   bool? hasHist;
   bool? hasimgRadio;
-  DateTime heure;
-  String? identifiant;
-  bool? imprimer;
-  ListCompteRenduAndPk? listCompteRenduAndPk;
-  bool? livre;
-  String? medPres;
-  String? medecinDictee;
-  String? nDossier;
-  String? ndossier;
-  String? observ;
-  String? patient;
+  bool? arrivee;
   bool? prepare;
-  String? rensClin;
-  bool? resultat;
-  String? salle;
-  bool? sex;
-  DateTime? sortieSalle;
-  bool? termine;
-  String? typeExamen;
-  bool? v;
-  bool? validerMedDictee;
+  bool? enSalle;
+  bool? cptEncours;
+  dynamic etat;
+  dynamic ndossier;
+  dynamic medPres;
 
   factory CompteRendu.fromMap(Map<String, dynamic> json) => CompteRendu(
-        arriveCentre: DateTime.parse(json["arriveCentre"]),
-        arrivee: json["arrivee"],
-        cdeMedPres: json["cdeMedPres"],
-        centre: json["centre"],
-        codeCentre: json["codeCentre"],
-        codeSalle: json["codeSalle"],
-        cptEncours: json["cptEncours"],
-        datNai: DateTime.parse(json["datNai"]),
-        date: DateTime.parse(json["date"]),
-        dateExecution: json["dateExecution"],
-        dateImp: DateTime.parse(json["dateImp"]),
-        designation: json["designation"],
-        dicte: json["dicte"],
-        dicteEnCours: json["dicteEnCours"],
-        dureeAttente: json["dureeAttente"],
-        dureeEnSalleEnMinute: json["dureeEnSalleEnMinute"],
-        dureeattenteArriv: json["dureeattenteArriv"],
-        dureeensalle: json["dureeensalle"],
-        enSalle: json["enSalle"],
-        entreeSalle: DateTime.parse(json["entreeSalle"]),
-        etat: json["etat"],
-        facture: json["facture"],
-        hasHist: json["hasHist"],
-        hasimgRadio: json["hasimgRadio"],
-        heure: DateTime.parse(json["heure"]),
-        identifiant: json["identifiant"],
-        imprimer: json["imprimer"],
         listCompteRenduAndPk:
             ListCompteRenduAndPk.fromJson(json["listCompteRenduAndPK"]),
-        livre: json["livre"],
-        medPres: json["medPres"],
-        medecinDictee: json["medecinDictee"],
-        nDossier: json["nDossier"],
-        ndossier: json["ndossier"],
-        observ: json["observ"],
-        patient: json["patient"],
-        prepare: json["prepare"],
-        rensClin: json["rensClin"],
-        resultat: json["resultat"],
-        salle: json["salle"],
-        sex: json["sex"],
-        sortieSalle: DateTime.parse(json["sortieSalle"]),
-        termine: json["termine"],
-        typeExamen: json["typeExamen"],
         v: json["v"],
+        nDossier: json["nDossier"],
+        patient: json["patient"],
+        datNai: json["datNai"],
+        sex: json["sex"],
+        designation: json["designation"],
+        observ: json["observ"],
+        date: json["date"],
+        heure: json["heure"],
+        medecinDictee: json["medecinDictee"],
+        cdeMedPres: json["cdeMedPres"],
+        codeCentre: json["codeCentre"],
+        centre: json["centre"],
+        codeSalle: json["codeSalle"],
+        salle: json["salle"],
+        identifiant: json["identifiant"],
+        termine: json["termine"],
+        entreeSalle: json["entreeSalle"],
+        sortieSalle: json["sortieSalle"],
+        dureeAttente: json["dureeAttente"],
+        dureeensalle: json["dureeensalle"],
+        dureeattenteArriv: json["dureeattenteArriv"],
+        dureeEnSalleEnMinute: json["dureeEnSalleEnMinute"],
         validerMedDictee: json["validerMedDictee"],
+        typeExamen: json["typeExamen"],
+        resultat: json["resultat"],
+        facture: json["facture"],
+        dateImp: json["dateImp"],
+        imprimer: json["imprimer"],
+        dateExecution: json["dateExecution"],
+        livre: json["livre"],
+        dicte: json["dicte"],
+        dicteEnCours: json["dicteEnCours"],
+        arriveCentre: json["arriveCentre"],
+        rensClin: json["rensClin"],
+        hasHist: json["hasHist"],
+        hasimgRadio: json["hasimgRadio"],
+        arrivee: json["arrivee"],
+        prepare: json["prepare"],
+        enSalle: json["enSalle"],
+        cptEncours: json["cptEncours"],
+        etat: json["etat"],
+        ndossier: json["ndossier"],
+        medPres: json["medPres"],
       );
 
   Map<String, dynamic> toJson() => {
-        "arriveCentre": arriveCentre?.toIso8601String(),
-        "arrivee": arrivee,
-        "cdeMedPres": cdeMedPres,
-        "centre": centre,
-        "codeCentre": codeCentre,
-        "codeSalle": codeSalle,
-        "cptEncours": cptEncours,
-        "datNai": datNai.toIso8601String(),
-        "date": date.toIso8601String(),
-        "dateExecution": dateExecution,
-        "dateImp": dateImp.toIso8601String(),
+        "listCompteRenduAndPK": listCompteRenduAndPk.toJson(),
+        "v": v,
+        "nDossier": nDossier,
+        "patient": patient,
+        "datNai": datNai,
+        "sex": sex,
         "designation": designation,
+        "observ": observ,
+        "date": date,
+        "heure": heure,
+        "medecinDictee": medecinDictee,
+        "cdeMedPres": cdeMedPres,
+        "codeCentre": codeCentre,
+        "centre": centre,
+        "codeSalle": codeSalle,
+        "salle": salle,
+        "identifiant": identifiant,
+        "termine": termine,
+        "entreeSalle": entreeSalle,
+        "sortieSalle": sortieSalle,
+        "dureeAttente": dureeAttente,
+        "dureeensalle": dureeensalle,
+        "dureeattenteArriv": dureeattenteArriv,
+        "dureeEnSalleEnMinute": dureeEnSalleEnMinute,
+        "validerMedDictee": validerMedDictee,
+        "typeExamen": typeExamen,
+        "resultat": resultat,
+        "facture": facture,
+        "dateImp": dateImp,
+        "imprimer": imprimer,
+        "dateExecution": dateExecution,
+        "livre": livre,
         "dicte": dicte,
         "dicteEnCours": dicteEnCours,
-        "dureeAttente": dureeAttente,
-        "dureeEnSalleEnMinute": dureeEnSalleEnMinute,
-        "dureeattenteArriv": dureeattenteArriv,
-        "dureeensalle": dureeensalle,
-        "enSalle": enSalle,
-        "entreeSalle": entreeSalle.toIso8601String(),
-        "etat": etat,
-        "facture": facture,
+        "arriveCentre": arriveCentre,
+        "rensClin": rensClin,
         "hasHist": hasHist,
         "hasimgRadio": hasimgRadio,
-        "heure": heure.toIso8601String(),
-        "identifiant": identifiant,
-        "imprimer": imprimer,
-        "listCompteRenduAndPK": listCompteRenduAndPk?.toJson(),
-        "livre": livre,
-        "medPres": medPres,
-        "medecinDictee": medecinDictee,
-        "nDossier": nDossier,
-        "ndossier": ndossier,
-        "observ": observ,
-        "patient": patient,
+        "arrivee": arrivee,
         "prepare": prepare,
-        "rensClin": rensClin,
-        "resultat": resultat,
-        "salle": salle,
-        "sex": sex,
-        "sortieSalle": sortieSalle?.toIso8601String(),
-        "termine": termine,
-        "typeExamen": typeExamen,
-        "v": v,
-        "validerMedDictee": validerMedDictee,
+        "enSalle": enSalle,
+        "cptEncours": cptEncours,
+        "etat": etat,
+        "ndossier": ndossier,
+        "medPres": medPres,
       };
 }
 

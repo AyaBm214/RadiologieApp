@@ -9,6 +9,7 @@ class ListComptesRendusController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    fetchCompteRendu();
   }
 
   fetchCompteRendu() async {
@@ -19,5 +20,6 @@ class ListComptesRendusController extends GetxController {
       // ignore: empty_statements
     }
     print("liste compte ${listCompte}");
+    return listCompte;
   }
 }
