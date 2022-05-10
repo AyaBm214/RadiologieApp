@@ -23,7 +23,30 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          onTap: () => homeController.fetchClinique(),
+          onTap: () => {
+            FutureBuilder(
+                future: homeController.fetchClinique(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return const Center(
+                      child: Text(
+                        "Impossible de récupere la liste des cliniques ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(0, 147, 189, 0.9),
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return buildList();
+                  } else {
+                    return const Center(
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                })
+          },
           child: const Icon(
             Icons.refresh_rounded,
             color: Colors.blue,

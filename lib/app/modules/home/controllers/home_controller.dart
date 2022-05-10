@@ -13,11 +13,9 @@ class HomeController extends GetxController {
   RxBool isSearching = false.obs;
   RxString searchInput = "".obs;
   Authentification configuration = Authentification();
-  final count = 0.obs;
 
   @override
   void onInit() {
-    fetchClinique();
     super.onInit();
     isLoaded.value = false;
   }
@@ -32,11 +30,8 @@ class HomeController extends GetxController {
     // var cliniques = await cliniqueWebServices.listCliniques();
     if (cliniques != null) {
       listcliniques = cliniques;
-      Cliniquetrouve.value = listcliniques.obs;
-    } else {
-      listcliniques = GetListCliniqueStatic.getListStatic();
+      Cliniquetrouve.value = cliniques;
     }
-    return listcliniques;
   }
 
   searchClinique(String input) {

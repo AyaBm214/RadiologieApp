@@ -10,7 +10,7 @@ showEtatDialog(BuildContext context) {
         Icon(
           Icons.border_all,
           color: Colors.blue,
-          size: 36.0,
+          size: 35.0,
         ),
         Text(
           "Tous",

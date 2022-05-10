@@ -9,18 +9,15 @@ import 'package:radiologiev2/app/modules/ListComptesRendus/controllers/list_comp
 
 ListComptesRendusController CompteController =
     Get.put(ListComptesRendusController());
-bool male = true;
-bool female = false;
 
 Widget buildListCompteRendu() {
   return Obx(() => ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       physics: const ScrollPhysics(),
-      itemCount: CompteController.listCompte.length,
+      itemCount: CompteController.Patienttrouve.length,
       itemBuilder: (BuildContext context, int index) {
-        CompteRendu compte = CompteController.listCompte[index];
-
+        CompteRendu compte = CompteController.Patienttrouve[index];
         return Card(
           child: InkWell(
             onTap: () {},
@@ -81,40 +78,92 @@ Widget buildListCompteRendu() {
                       ],
                     ),
                     child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage: NetworkImage(
-                            "https://cdn5.vectorstock.com/i/1000x1000/58/49/man-character-avatar-in-flat-design-vector-12015849.jpg"),
-                        backgroundColor: Colors.transparent,
-                      ),
-                      title: Text(
-                        compte.patient!.toString(),
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 19.0),
-                      ),
-                      subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              compte.dateExecution.toString(),
+                        leading: Row(mainAxisSize: MainAxisSize.min, children: [
+                          if (compte.sex == true) ...[
+                            const CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage: NetworkImage(
+                                  "https://cdn5.vectorstock.com/i/1000x1000/58/49/man-character-avatar-in-flat-design-vector-12015849.jpg"),
+                              backgroundColor: Colors.transparent,
                             ),
-                            Text(
-                              compte.designation.toString(),
+                          ],
+                          if (compte.sex == false) ...[
+                            const CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage: NetworkImage(
+                                  "https://cdn3.vectorstock.com/i/1000x1000/01/77/businesswoman-character-avatar-icon-vector-12800177.jpg"),
+                              backgroundColor: Colors.transparent,
                             ),
-                            Text(
-                              compte.medecinDictee.toString(),
+                          ]
+                        ]),
+                        title: Text(
+                          compte.patient!.toString(),
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.0),
+                        ),
+                        subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "RDV:" + compte.dateExecution.toString(),
+                              ),
+                              Text(
+                                "EXAMEN : " + compte.designation.toString(),
+                              ),
+                              Text(
+                                "Med Trt: " + compte.medecinDictee.toString(),
+                              ),
+                              Text(
+                                "Attente:" + compte.dureeAttente.toString(),
+                              ),
+                            ]),
+                        trailing:
+                            Row(mainAxisSize: MainAxisSize.min, children: [
+                          if (compte.etat == "enAttente") ...[
+                            Icon(
+                              Icons.alarm_on_rounded,
+                              color: Colors.blue,
+                              size: 30.0,
                             ),
-                            Text(
-                              compte.dureeAttente.toString(),
+                          ],
+                          if (compte.etat == "dictee") ...[
+                            Icon(
+                              Icons.mic,
+                              color: Colors.blue,
+                              size: 30.0,
                             ),
-                          ]),
-                      trailing: Icon(
-                        Icons.done_all,
-                        color: Colors.greenAccent,
-                      ),
-                    ),
+                          ],
+                          if (compte.enSalle == true) ...[
+                            Icon(
+                              Icons.door_back_door,
+                              color: Colors.blue,
+                              size: 30.0,
+                            ),
+                          ],
+                          if (compte.etat == "valide") ...[
+                            Icon(
+                              Icons.verified,
+                              color: Colors.greenAccent,
+                              size: 30.0,
+                            ),
+                          ],
+                          if (compte.livre == true) ...[
+                            Icon(
+                              Icons.done_all,
+                              color: Colors.greenAccent,
+                              size: 36.0,
+                            ),
+                          ],
+                          if (compte.etat == "ecrit") ...[
+                            Icon(
+                              Icons.edit,
+                              color: Colors.greenAccent,
+                              size: 36.0,
+                            ),
+                          ]
+                        ])),
                   ),
                 )
               ],

@@ -61,7 +61,7 @@ class CompteRendu {
   ListCompteRenduAndPk listCompteRenduAndPk;
   bool? v;
   dynamic nDossier;
-  dynamic patient;
+  String? patient;
   dynamic datNai;
   bool? sex;
   dynamic designation;

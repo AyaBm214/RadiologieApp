@@ -7,11 +7,29 @@ import 'ServiceUser.dart';
 
 class ServiceCompteRendu {
   static Future fetchCompteRendu() async {
+    print(ServiceUser.configuration.url +
+        '/radiologie/api/listcompterenduands/filterByDateAndCentreAndSalleAndEtat?dateDebut=' +
+        DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day - 1)
+            .millisecondsSinceEpoch
+            .toString() +
+        '&dateFin=' +
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .millisecondsSinceEpoch
+            .toString());
     final response = await http.get(Uri.parse(ServiceUser.configuration.url +
-        '/radiologie/api/listcompterenduands/filterByDateAndCentreAndSalleAndEtat?dateDebut=1647166688000&dateFin=1652091488000'));
+        '/radiologie/api/listcompterenduands/filterByDateAndCentreAndSalleAndEtat?dateDebut=' +
+        DateTime(DateTime.now().year, DateTime.now().month,
+                DateTime.now().day - 1)
+            .millisecondsSinceEpoch
+            .toString() +
+        '&dateFin=' +
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+            .millisecondsSinceEpoch
+            .toString()));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-      print("aaaaaaaaa service $parsed");
+
       return parsed
           .map<CompteRendu>((json) => CompteRendu.fromMap(json))
           .toList();
