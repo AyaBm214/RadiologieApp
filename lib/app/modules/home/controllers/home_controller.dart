@@ -26,11 +26,12 @@ class HomeController extends GetxController {
 
   Future fetchClinique() async {
     print("***************Fetching clinique********************");
-    var cliniques = GetListCliniqueStatic.getListStatic();
+    var cliniques = await cliniqueWebServices.listCliniques();
     // var cliniques = await cliniqueWebServices.listCliniques();
     if (cliniques != null) {
       listcliniques = cliniques;
       Cliniquetrouve.value = cliniques;
+      cliniques = GetListCliniqueStatic.getListStatic();
     }
   }
 

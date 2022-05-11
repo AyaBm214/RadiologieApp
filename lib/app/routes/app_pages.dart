@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../modules/Bloc/bindings/bloc_binding.dart';
+import '../modules/Bloc/views/bloc_view.dart';
+import '../modules/Exploitation/bindings/exploitation_binding.dart';
+import '../modules/Exploitation/views/exploitation_view.dart';
 import '../modules/ListComptesRendus/bindings/list_comptes_rendus_binding.dart';
 import '../modules/ListComptesRendus/views/list_comptes_rendus_view.dart';
 import '../modules/Rendezvous/views/rendezvous_view.dart';
@@ -40,6 +44,16 @@ class AppPages {
       name: _Paths.LIST_COMPTES_RENDUS,
       page: () => ListComptesRendusView(),
       binding: ListComptesRendusBinding(),
+    ),
+    GetPage(
+      name: _Paths.EXPLOITATION,
+      page: () => ExploitationView(),
+      binding: ExploitationBinding(),
+    ),
+    GetPage(
+      name: _Paths.BLOC,
+      page: () => BlocView(),
+      binding: BlocBinding(),
     ),
   ];
 }

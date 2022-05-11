@@ -12,6 +12,8 @@ abstract class Routes {
   static const RENDEZVOUS = _Paths.ACCEUIL + _Paths.RENDEZVOUS;
   static const DECONNEXION = _Paths.ACCEUIL + _Paths.DECONNEXION;
   static const LIST_COMPTES_RENDUS = _Paths.LIST_COMPTES_RENDUS;
+  static const EXPLOITATION = _Paths.EXPLOITATION;
+  static const BLOC = _Paths.BLOC;
 }
 
 abstract class _Paths {
@@ -25,4 +27,6 @@ abstract class _Paths {
   static const RENDEZVOUS = '/rendezvous';
   static const DECONNEXION = '/deconnexion';
   static const LIST_COMPTES_RENDUS = '/list-comptes-rendus';
+  static const EXPLOITATION = '/exploitation';
+  static const BLOC = '/bloc';
 }

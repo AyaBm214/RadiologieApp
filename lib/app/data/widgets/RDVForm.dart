@@ -33,10 +33,11 @@ class FormulaireView extends GetView<RendezvousController> {
             child: Column(
               children: <Widget>[
                 AppBar(
+                  backgroundColor: Colors.white,
                   leading: IconButton(
                     icon: const Icon(
                       Icons.arrow_back_ios,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     onPressed: () {
                       showDialog(
@@ -71,12 +72,20 @@ class FormulaireView extends GetView<RendezvousController> {
                     },
                   ),
                   elevation: 0,
-                  title: const Text('Rendez Vous'),
+                  title: const Text(
+                    'Rendez-Vous',
+                    style: TextStyle(
+                        letterSpacing: 5,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black,
+                        fontSize: 18),
+                  ),
                   actions: <Widget>[
                     IconButton(
                       icon: const Icon(
-                        Icons.check,
-                        color: Colors.white,
+                        Icons.verified_outlined,
+                        color: Colors.black,
+                        size: 30,
                       ),
                       onPressed: () {
                         if (form_rdv.currentState!.validate()) {
@@ -94,7 +103,6 @@ class FormulaireView extends GetView<RendezvousController> {
                       },
                     ),
                   ],
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
                   centerTitle: true,
                 ),
                 Container(
@@ -116,19 +124,22 @@ class FormulaireView extends GetView<RendezvousController> {
                                   rendezvousController.listCenter.value
                                       .forEach((element) {
                                     if (element.designCentre == value) {
-                                      rendezvousController.Lcenterv.value =
+                                      rendezvousController.L2centerv.value =
                                           element;
                                     }
                                   }),
                                 },
                             selectedItem: rendezvousController
-                                .Lcenterv.value.designCentre,
+                                .L2centerv.value.designCentre,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Center",
                                 hintStyle:
                                     const TextStyle(color: Colors.blueGrey),
-                                prefixIcon: const Icon(Icons.business_center),
+                                prefixIcon: const Icon(
+                                  Icons.business_center,
+                                  color: Colors.black,
+                                ),
                                 labelStyle: TextStyle(
                                   color: Get.theme.primaryColor,
                                   fontWeight: FontWeight.w700,
@@ -177,7 +188,10 @@ class FormulaireView extends GetView<RendezvousController> {
                                 hintText: "Select Salle",
                                 hintStyle:
                                     const TextStyle(color: Colors.blueGrey),
-                                prefixIcon: const Icon(Icons.home_outlined),
+                                prefixIcon: const Icon(
+                                  Icons.home_outlined,
+                                  color: Colors.black,
+                                ),
                                 labelStyle: TextStyle(
                                   color: Get.theme.primaryColor,
                                   fontWeight: FontWeight.w700,
@@ -224,7 +238,10 @@ class FormulaireView extends GetView<RendezvousController> {
                                 hintText: "Select Medecin M",
                                 hintStyle:
                                     const TextStyle(color: Colors.blueGrey),
-                                prefixIcon: const Icon(Icons.search),
+                                prefixIcon: const Icon(
+                                  Icons.perm_identity,
+                                  color: Colors.black,
+                                ),
                                 labelStyle: TextStyle(
                                   color: Get.theme.primaryColor,
                                   fontWeight: FontWeight.w700,
@@ -271,7 +288,10 @@ class FormulaireView extends GetView<RendezvousController> {
                                 hintText: "Select Medecin P",
                                 hintStyle:
                                     const TextStyle(color: Colors.blueGrey),
-                                prefixIcon: const Icon(Icons.search),
+                                prefixIcon: const Icon(
+                                  Icons.perm_identity,
+                                  color: Colors.black,
+                                ),
                                 labelStyle: TextStyle(
                                   color: Get.theme.primaryColor,
                                   fontWeight: FontWeight.w700,
@@ -306,7 +326,10 @@ class FormulaireView extends GetView<RendezvousController> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: " Objet",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.emoji_objects),
+                          prefixIcon: const Icon(
+                            Icons.emoji_objects,
+                            color: Colors.yellow,
+                          ),
                           labelStyle: TextStyle(
                             color: Get.theme.primaryColor,
                             fontWeight: FontWeight.w700,
@@ -357,7 +380,10 @@ class FormulaireView extends GetView<RendezvousController> {
                                 hintText: "Code/designation",
                                 hintStyle:
                                     const TextStyle(color: Colors.blueGrey),
-                                prefixIcon: const Icon(Icons.home_outlined),
+                                prefixIcon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                ),
                                 labelStyle: TextStyle(
                                   color: Get.theme.primaryColor,
                                   fontWeight: FontWeight.w700,
@@ -393,7 +419,10 @@ class FormulaireView extends GetView<RendezvousController> {
                             contentPadding: const EdgeInsets.all(5),
                             hintText: " Date rdv",
                             hintStyle: const TextStyle(color: Colors.blueGrey),
-                            prefixIcon: const Icon(Icons.calendar_today),
+                            prefixIcon: const Icon(
+                              Icons.calendar_today,
+                              color: Colors.red,
+                            ),
                             labelStyle: TextStyle(
                               color: Get.theme.primaryColor,
                               fontWeight: FontWeight.w700,
@@ -466,7 +495,10 @@ class FormulaireView extends GetView<RendezvousController> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: "Name",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.person),
+                          prefixIcon: const Icon(
+                            Icons.perm_identity,
+                            color: Colors.black,
+                          ),
                           labelStyle: TextStyle(
                             color: Get.theme.primaryColor,
                             fontWeight: FontWeight.w700,
@@ -499,7 +531,10 @@ class FormulaireView extends GetView<RendezvousController> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: " Last name",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.person),
+                          prefixIcon: const Icon(
+                            Icons.perm_identity,
+                            color: Colors.black,
+                          ),
                           labelStyle: TextStyle(
                             color: Get.theme.primaryColor,
                             fontWeight: FontWeight.w700,
@@ -522,7 +557,10 @@ class FormulaireView extends GetView<RendezvousController> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: "Person Number",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.send_to_mobile),
+                          prefixIcon: const Icon(
+                            Icons.phone,
+                            color: Colors.red,
+                          ),
                           labelStyle: TextStyle(
                             color: Get.theme.primaryColor,
                             fontWeight: FontWeight.w700,
@@ -556,7 +594,10 @@ class FormulaireView extends GetView<RendezvousController> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: " Home Number",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.phone),
+                          prefixIcon: const Icon(
+                            Icons.phone,
+                            color: Colors.red,
+                          ),
                           labelStyle: TextStyle(
                             color: Get.theme.primaryColor,
                             fontWeight: FontWeight.w700,
@@ -591,7 +632,10 @@ class FormulaireView extends GetView<RendezvousController> {
                           contentPadding: const EdgeInsets.all(10),
                           hintText: " Email",
                           hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.email_outlined),
+                          prefixIcon: const Icon(
+                            Icons.email_outlined,
+                            color: Colors.lightBlueAccent,
+                          ),
                           labelStyle: TextStyle(
                             color: Get.theme.primaryColor,
                             fontWeight: FontWeight.w700,
@@ -637,7 +681,10 @@ class FormulaireView extends GetView<RendezvousController> {
                                 hintText: "Select Organisme",
                                 hintStyle:
                                     const TextStyle(color: Colors.blueGrey),
-                                prefixIcon: const Icon(Icons.work),
+                                prefixIcon: const Icon(
+                                  Icons.work,
+                                  color: Colors.black,
+                                ),
                                 labelStyle: TextStyle(
                                   color: Get.theme.primaryColor,
                                   fontWeight: FontWeight.w700,
@@ -671,7 +718,10 @@ class FormulaireView extends GetView<RendezvousController> {
                         contentPadding: const EdgeInsets.all(5),
                         hintText: " Date of Birth",
                         hintStyle: const TextStyle(color: Colors.blueGrey),
-                        prefixIcon: const Icon(Icons.calendar_today_outlined),
+                        prefixIcon: const Icon(
+                          Icons.calendar_today_outlined,
+                          color: Colors.red,
+                        ),
                         labelStyle: TextStyle(
                           color: Get.theme.primaryColor,
                           fontWeight: FontWeight.w700,

@@ -18,6 +18,9 @@ class RendezvousController extends GetxController {
   final ServiceCenter _serviceCenter = ServiceCenter();
   RxList<Centerv> listCenter = List<Centerv>.empty(growable: true).obs;
   Rx<Centerv> Lcenterv = Centerv().obs;
+  Rx<Centerv> L2centerv = Centerv().obs;
+  Rx<Centerv> L3centerv = Centerv().obs;
+
   final ServiceMedecin service_medecin = ServiceMedecin();
   RxList<Medecin> listMedecin = List<Medecin>.empty(growable: true).obs;
   RxList<Medecin> listMedecinP = List<Medecin>.empty(growable: true).obs;
@@ -34,7 +37,9 @@ class RendezvousController extends GetxController {
   final ServiceSalle ss = ServiceSalle();
   RxList<Salle> listSalle = List<Salle>.empty(growable: true).obs;
   Rx<Salle> Lsalle = Salle().obs;
+  Rx<Salle> L2salle = Salle().obs;
   RxList<Pillar> resources = List<Pillar>.empty(growable: true).obs;
+  String? defaultLocale;
 
   @override
   void onInit() {
@@ -45,7 +50,10 @@ class RendezvousController extends GetxController {
     fetchSalle();
     resources.value = [
       Pillar(
-        head: PillarHead(title: 'Salle', object: 1),
+        head: PillarHead(
+          title: ' ',
+          object: 1,
+        ),
         events: [
           AgendaEvent(
             title: 'Meeting D',
@@ -59,32 +67,6 @@ class RendezvousController extends GetxController {
             subtitle: 'MZ',
             start: EventTime(hour: 12, minute: 0),
             end: EventTime(hour: 13, minute: 20),
-          ),
-        ],
-      ),
-      Pillar(
-        head: PillarHead(title: 'Resource 2', object: 2),
-        events: [
-          AgendaEvent(
-            title: 'Meeting G',
-            subtitle: 'MG',
-            backgroundColor: Colors.yellowAccent,
-            start: EventTime(hour: 9, minute: 10),
-            end: EventTime(hour: 11, minute: 45),
-          ),
-        ],
-      ),
-      Pillar(
-        head: PillarHead(title: 'Resource 3', object: 3, color: Colors.yellow),
-        events: [
-          AgendaEvent(
-            title: 'Meeting A',
-            subtitle: 'MA',
-            start: EventTime(hour: 10, minute: 10),
-            end: EventTime(hour: 11, minute: 45),
-            onTap: () {
-              print("meeting A Details");
-            },
           ),
         ],
       ),

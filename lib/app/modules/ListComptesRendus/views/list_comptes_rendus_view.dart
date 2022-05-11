@@ -41,12 +41,12 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
                           rendezvousController.listCenter.value
                               .forEach((element) {
                             if (element.designCentre == value) {
-                              rendezvousController.Lcenterv.value = element;
+                              rendezvousController.L3centerv.value = element;
                             }
                           }),
                         },
                     selectedItem:
-                        rendezvousController.Lcenterv.value.designCentre,
+                        rendezvousController.L3centerv.value.designCentre,
                     dropdownSearchDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(8),
                       hintText: "Tous Les Centres",

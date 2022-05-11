@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/Services/ServiceUser.dart';
+import 'package:radiologiev2/app/modules/Bloc/views/bloc_view.dart';
+import 'package:radiologiev2/app/modules/Exploitation/views/exploitation_view.dart';
 import 'package:radiologiev2/app/modules/Rendezvous/views/rendezvous_view.dart';
 import 'package:radiologiev2/app/modules/home/controllers/home_controller.dart';
 import 'package:radiologiev2/app/modules/home/views/home_view.dart';
@@ -38,7 +40,10 @@ class NavigationDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            trailing: const Icon(Icons.file_copy),
+            trailing: const Icon(
+              Icons.file_copy_outlined,
+              color: Colors.black,
+            ),
             title: const Text("Radio"),
             onTap: () {
               Navigator.of(context).pop();
@@ -50,19 +55,25 @@ class NavigationDrawer extends StatelessWidget {
             color: Colors.black38,
           ),
           ListTile(
-            trailing: const Icon(Icons.border_all),
+            trailing: const Icon(
+              Icons.border_all,
+              color: Colors.black,
+            ),
             title: const Text("Exploitation"),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => HomeView()));
+                  builder: (BuildContext context) => ExploitationView()));
             },
           ),
           const Divider(
             color: Colors.black38,
           ),
           ListTile(
-            trailing: const Icon(Icons.event),
+            trailing: const Icon(
+              Icons.event,
+              color: Colors.red,
+            ),
             title: const Text("Rendez-vous"),
             onTap: () {
               Navigator.of(context).pop();
@@ -74,20 +85,26 @@ class NavigationDrawer extends StatelessWidget {
             color: Colors.black38,
           ),
           ListTile(
-            trailing: const Icon(Icons.home_outlined),
+            trailing: const Icon(
+              Icons.file_copy,
+              color: Colors.black,
+            ),
             title: const Text("Bloc Cathé"),
             onTap: () {
               Navigator.of(context).pop();
 
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => HomeView()));
+                  builder: (BuildContext context) => BlocView()));
             },
           ),
           const Divider(
             color: Colors.black38,
           ),
           ListTile(
-            trailing: const Icon(Icons.login),
+            trailing: const Icon(
+              Icons.logout,
+              color: Colors.black,
+            ),
             title: const Text("Deconnexion"),
             onTap: () {
               Navigator.of(context).pop();

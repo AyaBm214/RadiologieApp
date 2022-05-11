@@ -17,6 +17,8 @@ class RendezvousView extends GetView<RendezvousController> {
   TextEditingController _textFieldController = TextEditingController();
   late String valueText;
   late String codeDialog;
+  final RendezvousController SalleAgendaController =
+      Get.put(RendezvousController());
 
   @override
   Widget build(BuildContext context) {
@@ -80,21 +82,65 @@ class RendezvousView extends GetView<RendezvousController> {
           },
           child: const Icon(Icons.add),
         ),
-        body: AgendaView(
-          agendaStyle: const AgendaStyle(
-            startHour: 9,
-            endHour: 20,
-            pillarSeperator: false,
-            visibleTimeBorder: true,
-            timeItemWidth: 40,
-            timeItemHeight: 160,
-          ),
-          pillarList: rendezvousController.resources.value,
-          onLongPress: (clickedTime, object) {
-            print("Clicked time: ${clickedTime.hour}:${clickedTime.minute}");
-            print("Head Object related to the resource: $object");
-          },
-        ));
+        body: Column(children: [
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(12),
+              child: SizedBox(
+                child: Obx(
+                  () => DropdownSearch<String>(
+                      mode: Mode.BOTTOM_SHEET,
+                      showSearchBox: true,
+                      items: rendezvousController.listSalle
+                          .map((element) => defaultLocale == "ar"
+                              ? element.designation.toString()
+                              : element.designation!.toString())
+                          .toList(),
+                      onChanged: (value) => {
+                            print(value),
+                            rendezvousController.listSalle.value
+                                .forEach((element) {
+                              if (element.designation == value) {
+                                rendezvousController.L2salle.value = element;
+                              }
+                            }),
+                          },
+                      selectedItem:
+                          rendezvousController.L2salle.value.designation,
+                      dropdownSearchDecoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10),
+                          hintText: "List des Salles",
+                          hintStyle: const TextStyle(color: Colors.blueGrey),
+                          prefixIcon: const Icon(Icons.home_outlined),
+                          labelStyle: TextStyle(
+                            color: Get.theme.primaryColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide(
+                                color: Get.theme.primaryColor, width: 1.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                  color: Get.theme.primaryColor, width: 1.0)))),
+                ),
+              )),
+          Expanded(
+            child: AgendaView(
+              agendaStyle: const AgendaStyle(
+                startHour: 9,
+                endHour: 20,
+                pillarSeperator: false,
+                visibleTimeBorder: true,
+                timeItemWidth: 40,
+                timeItemHeight: 160,
+              ),
+              pillarList: rendezvousController.resources.value,
+            ),
+          )
+        ]));
   }
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
