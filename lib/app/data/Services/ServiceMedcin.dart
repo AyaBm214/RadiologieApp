@@ -8,7 +8,7 @@ import 'ServiceUser.dart';
 class ServiceMedecin {
   Future fetchMedcin() async {
     final response = await http.get(
-        Uri.parse(ServiceUser.configuration.url + '/radiologie/api/medecins'));
+        Uri.parse(ServiceUser.configuration.url! + '/radiologie/api/medecins'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.

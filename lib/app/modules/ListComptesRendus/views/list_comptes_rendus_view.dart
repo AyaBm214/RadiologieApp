@@ -1,19 +1,15 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/models/CompteRmodel.dart';
 import 'package:radiologiev2/app/data/widgets/EtatWidget.dart';
 import 'package:radiologiev2/app/data/widgets/ListCRendu.dart';
 import 'package:radiologiev2/app/modules/ListComptesRendus/controllers/list_comptes_rendus_controller.dart';
-import 'package:radiologiev2/app/modules/Rendezvous/controllers/rendezvous_controller.dart';
 
 import '../../../data/widgets/NavugationDrawer.dart';
 
 class ListComptesRendusView extends GetView<ListComptesRendusController> {
   final datearrivee = TextEditingController();
   final datesortie = TextEditingController();
-  final RendezvousController rendezvousController =
-      Get.put(RendezvousController());
   String? defaultLocale;
   ListComptesRendusController CompteController =
       Get.put(ListComptesRendusController());
@@ -26,7 +22,7 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
       drawer: NavigationDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        title: SizedBox(
+        /*title: SizedBox(
           child: Obx(
             () => !CompteController.isSearching.value
                 ? DropdownSearch<String>(
@@ -41,12 +37,14 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
                           rendezvousController.listCenter.value
                               .forEach((element) {
                             if (element.designCentre == value) {
-                              rendezvousController.L3centerv.value = element;
+                              rendezvousController.LcentervCR.value = element;
+                              print(rendezvousController
+                                  .LcentervCR.value.codeCentre);
                             }
                           }),
                         },
                     selectedItem:
-                        rendezvousController.L3centerv.value.designCentre,
+                        rendezvousController.LcentervCR.value.designCentre,
                     dropdownSearchDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(8),
                       hintText: "Tous Les Centres",
@@ -72,7 +70,7 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
                     ),
                   ),
           ),
-        ),
+        ),*/
         centerTitle: true,
         actions: [
           Row(

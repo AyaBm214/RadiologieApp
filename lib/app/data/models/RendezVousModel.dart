@@ -4,138 +4,129 @@
 
 import 'dart:convert';
 
-import 'package:intl_phone_field/phone_number.dart';
+List<RendezVous> rendezVousFromJson(String str) =>
+    List<RendezVous>.from(json.decode(str).map((x) => RendezVous.fromJson(x)));
 
-RendezVous rendezVousFromJson(String str) =>
-    RendezVous.fromJson(json.decode(str));
-
-String rendezVousToJson(RendezVous data) => json.encode(data.toJson());
+String rendezVousToJson(List<RendezVous> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class RendezVous {
-  RendezVous({
-    this.codeCentre,
-    this.Centre,
-    this.Salle,
-    this.medecinM,
-    this.medecinP,
-    this.objet,
-    this.email,
-    this.organisme,
-    this.telperson,
-    this.tel,
-    this.codeMed,
-    this.codeSalle,
-    this.designation,
-    this.Exam,
-    this.id,
-    this.listRdvAndPk,
-    this.nomCli,
-    this.prenom,
-    this.Daterdv,
-    this.Heurerdv,
-    Datebirth,
-  });
+  RendezVous(
+      {this.listRdvAndPk,
+      this.id,
+      this.codeCentre,
+      this.centre,
+      this.codeSalle,
+      this.designation,
+      this.prenom,
+      this.nomCli,
+      this.designationExam,
+      this.codeMed,
+      this.codeMedPres,
+      this.confirme,
+      this.nomMed,
+      this.organisme,
+      this.email,
+      this.objet,
+      this.medecinP,
+      this.Exam,
+      this.Daterdv,
+      this.Heurerdv,
+      this.Datebirth,
+      this.telperson,
+      this.tel});
 
+  ListRdvAndPk? listRdvAndPk;
+  String? id;
   String? codeCentre;
-  String? Centre;
-  String? Salle;
-  String? medecinM;
+  String? centre;
+  int? codeSalle;
+  String? designation;
+  String? prenom;
+  String? nomCli;
+  String? designationExam;
+  String? codeMed;
+  String? codeMedPres;
+  bool? confirme;
+  String? nomMed;
   String? medecinP;
   String? objet;
   String? email;
   String? organisme;
-  PhoneNumber? telperson;
-  PhoneNumber? tel;
-  String? codeMed;
-  int? codeSalle;
-  String? designation;
   String? Exam;
-  String? id;
-  ListRdvAndPk? listRdvAndPk;
-  String? nomCli;
-  String? prenom;
   DateTime? Daterdv;
-  DateTime? Datebirth;
   DateTime? Heurerdv;
+  DateTime? Datebirth;
+  String? tel;
+  String? telperson;
 
   factory RendezVous.fromJson(Map<String, dynamic> json) => RendezVous(
+        listRdvAndPk: ListRdvAndPk.fromJson(json["listRdvAndPK"]),
+        id: json["id"],
         codeCentre: json["codeCentre"],
-        Centre: json["designCentre"],
-        Salle: json["dessalle"],
-        medecinM: json["MedecinM"],
-        medecinP: json["MedecinP"],
-        objet: json["objet"],
-        email: json["email"],
-        organisme: json["Organisme"],
-        telperson: json["telperson"],
-        tel: json["Tel"],
-        codeMed: json["codeMed"],
+        centre: json["centre"],
         codeSalle: json["codeSalle"],
         designation: json["designation"],
-        Exam: json["designationExam"],
-        id: json["id"],
-        listRdvAndPk: ListRdvAndPk.fromJson(json["listRdvAndPK"]),
-        nomCli: json["nomCli"],
         prenom: json["prenom"],
-        Daterdv: json["Daterdv"],
-        Heurerdv: json["Heurerdv"],
-        Datebirth: json["Datebirth"],
+        nomCli: json["nomCli"],
+        designationExam: json["designationExam"],
+        codeMed: json["codeMed"],
+        codeMedPres: json["codeMedPres"],
+        confirme: json["confirme"],
+        nomMed: json["nomMed"],
       );
 
   Map<String, dynamic> toJson() => {
+        "listRdvAndPK": listRdvAndPk!.toJson(),
+        "id": id,
         "codeCentre": codeCentre,
-        "designCentre": Centre,
-        "dessalle": Salle,
-        "MedecinM": medecinM,
-        "MedecinP": medecinP,
-        "objet": objet,
-        "email": email,
-        "Organisme": organisme,
-        "telperson": telperson,
-        "Tel": tel,
-        "codeMed": codeMed,
+        "centre": centre,
         "codeSalle": codeSalle,
         "designation": designation,
-        "designationExam": Exam,
-        "id": id,
-        "listRdvAndPK": listRdvAndPk?.toJson(),
-        "nomCli": nomCli,
         "prenom": prenom,
-        "Daterdv": Daterdv,
-        "Heurerdv": Heurerdv,
-        "Datebirth": Datebirth,
+        "nomCli": nomCli,
+        "designationExam": designationExam,
+        "codeMed": codeMed,
+        "codeMedPres": codeMedPres,
+        "confirme": confirme,
+        "nomMed": nomMed,
       };
 
   @override
   String toString() {
-    return 'RendezVous{codeCentre: $codeCentre, designCentre: $Centre, dessalle: $Salle, medecinM: $medecinM, medecinP: $medecinP, objet: $objet, Daterdv: $Daterdv , Heurerdv: $Heurerdv, email: $email, organisme: $organisme, telperson: $telperson, tel: $tel, codeMed: $codeMed, codeSalle: $codeSalle, designation: $designation, designationExam: $Exam, id: $id, listRdvAndPk: ${listRdvAndPk.toString()}, nomCli: $nomCli, prenom: $prenom , Datebirth:$Datebirth}';
+    return 'RendezVous{listRdvAndPk: $listRdvAndPk, id: $id, codeCentre: $codeCentre, centre: $centre, codeSalle: $codeSalle, designation: $designation, prenom: $prenom, nomCli: $nomCli, designationExam: $designationExam, codeMed: $codeMed, codeMedPres: $codeMedPres, confirme: $confirme, nomMed: $nomMed, medecinP: $medecinP, objet: $objet, email: $email, organisme: $organisme, Exam: $Exam, Daterdv: $Daterdv, Heurerdv: $Heurerdv, Datebirth: $Datebirth, tel: $tel, telperson: $telperson}';
   }
 }
 
 class ListRdvAndPk {
   ListRdvAndPk({
     this.codexam,
-    this.heureRdv,
     this.numRdv,
+    this.dateRdv,
+    this.heureRdv,
   });
 
   String? codexam;
-  DateTime? heureRdv;
   String? numRdv;
+  int? dateRdv;
+  int? heureRdv;
 
   factory ListRdvAndPk.fromJson(Map<String, dynamic> json) => ListRdvAndPk(
         codexam: json["codexam"],
-        heureRdv: DateTime.parse(json["heureRDV"]),
         numRdv: json["numRdv"],
+        dateRdv: json["dateRDV"],
+        heureRdv: json["heureRDV"],
       );
 
   Map<String, dynamic> toJson() => {
         "codexam": codexam,
-        "heureRDV": heureRdv?.toIso8601String(),
         "numRdv": numRdv,
+        "dateRDV": dateRdv,
+        "heureRDV": heureRdv,
       };
+
   @override
   String toString() {
-    return 'ListRdvAndPk{codexam: $codexam, heureRdv: $heureRdv, numRdv: $numRdv}';
+    return 'ListRdvAndPk{codexam: $codexam, numRdv: $numRdv, dateRdv: $dateRdv, heureRdv: $heureRdv}';
   }
 }

@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-List<Centerv> postFromJson(String str) =>
+List<Centerv> centerFromJson(String str) =>
     List<Centerv>.from(json.decode(str).map((x) => Centerv.fromMap(x)));
 
 class Centerv {
@@ -59,4 +59,9 @@ class Centerv {
         imgCpt: json["imgCpt"],
         codMotif: json["codMotif"],
       );
+
+  @override
+  String toString() {
+    return 'Centerv{codeCentre: $codeCentre, designCentre: $designCentre, tableCptRendu: $tableCptRendu, nature: $nature, duree: $duree, natureActe: $natureActe, bloc: $bloc, natureAdmission: $natureAdmission, kt: $kt, hopital: $hopital, numrecept: $numrecept, autorisFacturationHonoraire: $autorisFacturationHonoraire, indImage: $indImage, imgCpt: $imgCpt, codMotif: $codMotif}';
+  }
 }

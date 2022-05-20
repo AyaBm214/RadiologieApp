@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-List<Salle> postFromJson(String str) =>
+List<Salle> sallesFromJson(String str) =>
     List<Salle>.from(json.decode(str).map((x) => Salle.fromMap(x)));
 
 class Salle {
@@ -49,4 +49,9 @@ class Salle {
         "descModalite": descModalite,
         "stationAet": stationAet,
       };
+
+  @override
+  String toString() {
+    return 'Salle{codeSalle: $codeSalle, designation: $designation, codeCentre: $codeCentre, codSalleEndo: $codSalleEndo, modalite: $modalite, num: $num, descModalite: $descModalite, stationAet: $stationAet}';
+  }
 }

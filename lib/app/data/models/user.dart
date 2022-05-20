@@ -40,38 +40,43 @@ class User {
   bool? cptconsultActivityAll;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    userName: json["userName"],
-    matricule: json["matricule"],
-    description: json["description"],
-    passWord: json["passWord"],
-    grp: json["grp"],
-    oldGrp: json["oldGrp"],
-    codeMedecinInfirmier: json["codeMedecinInfirmier"],
-    actif: json["actif"],
-    chStat: json["chStat"],
-    dernierDateCnx: json["dernierDateCnx"],
-    dateModPwd: json["dateModPwd"],
-    traceNotif: json["traceNotif"],
-    validCptRend: json["validCptRend"],
-    cptShowAllPatient: json["cptShowAllPatient"],
-    cptconsultActivityAll: json["cptconsultActivityAll"],
-  );
+        userName: json["userName"],
+        matricule: json["matricule"],
+        description: json["description"],
+        passWord: json["passWord"],
+        grp: json["grp"],
+        oldGrp: json["oldGrp"],
+        codeMedecinInfirmier: json["codeMedecinInfirmier"],
+        actif: json["actif"],
+        chStat: json["chStat"],
+        dernierDateCnx: json["dernierDateCnx"],
+        dateModPwd: json["dateModPwd"],
+        traceNotif: json["traceNotif"],
+        validCptRend: json["validCptRend"],
+        cptShowAllPatient: json["cptShowAllPatient"],
+        cptconsultActivityAll: json["cptconsultActivityAll"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "userName": userName,
-    "matricule": matricule,
-    "description": description,
-    "passWord": passWord,
-    "grp": grp,
-    "oldGrp": oldGrp,
-    "codeMedecinInfirmier": codeMedecinInfirmier,
-    "actif": actif,
-    "chStat": chStat,
-    "dernierDateCnx": dernierDateCnx,
-    "dateModPwd": dateModPwd,
-    "traceNotif": traceNotif,
-    "validCptRend": validCptRend,
-    "cptShowAllPatient": cptShowAllPatient,
-    "cptconsultActivityAll": cptconsultActivityAll,
-  };
+        "userName": userName,
+        "matricule": matricule,
+        "description": description,
+        "passWord": passWord,
+        "grp": grp,
+        "oldGrp": oldGrp,
+        "codeMedecinInfirmier": codeMedecinInfirmier,
+        "actif": actif,
+        "chStat": chStat,
+        "dernierDateCnx": dernierDateCnx,
+        "dateModPwd": dateModPwd,
+        "traceNotif": traceNotif,
+        "validCptRend": validCptRend,
+        "cptShowAllPatient": cptShowAllPatient,
+        "cptconsultActivityAll": cptconsultActivityAll,
+      };
+
+  @override
+  String toString() {
+    return 'User{userName: $userName, matricule: $matricule, description: $description, passWord: $passWord, grp: $grp, oldGrp: $oldGrp, codeMedecinInfirmier: $codeMedecinInfirmier, actif: $actif, chStat: $chStat, dernierDateCnx: $dernierDateCnx, dateModPwd: $dateModPwd, traceNotif: $traceNotif, validCptRend: $validCptRend, cptShowAllPatient: $cptShowAllPatient, cptconsultActivityAll: $cptconsultActivityAll}';
+  }
 }

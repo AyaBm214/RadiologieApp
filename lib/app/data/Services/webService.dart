@@ -11,12 +11,12 @@ class WebService {
   listCliniques() async {
     var envelope =
         '''<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
-    <Body>
-        <ListCliniqueForAndroidByModule xmlns="http://service.dmi.csys.com/">
-            <arg0 xmlns="">Comptes_Rendu</arg0>
-        </ListCliniqueForAndroidByModule>
-    </Body>
-</Envelope>
+             <Body>
+               <ListCliniqueForAndroidByModule xmlns="http://service.dmi.csys.com/">
+                   <arg0 xmlns="">Comptes_Rendu</arg0>
+               </ListCliniqueForAndroidByModule>
+             </Body>
+           </Envelope>
         ''';
     http.Response response = await http
         .post(Uri.parse(endpoint),

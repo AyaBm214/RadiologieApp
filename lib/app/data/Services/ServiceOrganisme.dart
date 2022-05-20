@@ -8,7 +8,7 @@ import 'ServiceUser.dart';
 class ServiceOrganisme {
   Future fetchOrganisme() async {
     final response = await http.get(
-        Uri.parse(ServiceUser.configuration.url + '/radiologie/api/societes'));
+        Uri.parse(ServiceUser.configuration.url! + '/radiologie/api/societes'));
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       print(parsed);

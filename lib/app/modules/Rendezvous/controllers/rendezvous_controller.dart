@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_agenda/flutter_agenda.dart';
@@ -7,70 +8,106 @@ import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
 import 'package:radiologiev2/app/data/Services/ServiceExam.dart';
 import 'package:radiologiev2/app/data/Services/ServiceMedcin.dart';
 import 'package:radiologiev2/app/data/Services/ServiceOrganisme.dart';
+import 'package:radiologiev2/app/data/Services/ServiceRendezVous.dart';
 import 'package:radiologiev2/app/data/Services/ServiceSalle.dart';
 import 'package:radiologiev2/app/data/models/CenterModel.dart';
 import 'package:radiologiev2/app/data/models/ExamModel.dart';
 import 'package:radiologiev2/app/data/models/Medcin.dart';
 import 'package:radiologiev2/app/data/models/OrganismeModel.dart';
+import 'package:radiologiev2/app/data/models/RendezVousModel.dart';
 import 'package:radiologiev2/app/data/models/SalleModel.dart';
 
 class RendezvousController extends GetxController {
   final ServiceCenter _serviceCenter = ServiceCenter();
   RxList<Centerv> listCenter = List<Centerv>.empty(growable: true).obs;
   Rx<Centerv> Lcenterv = Centerv().obs;
-  Rx<Centerv> L2centerv = Centerv().obs;
-  Rx<Centerv> L3centerv = Centerv().obs;
-
+  Rx<Centerv> LcentervRDV = Centerv().obs;
+  Rx<Centerv> LcentervCR = Centerv().obs;
   final ServiceMedecin service_medecin = ServiceMedecin();
+  final ServiceRendezVous serviceRendezVous = ServiceRendezVous();
   RxList<Medecin> listMedecin = List<Medecin>.empty(growable: true).obs;
   RxList<Medecin> listMedecinP = List<Medecin>.empty(growable: true).obs;
   RxList<Medecin> listMedecinM = List<Medecin>.empty(growable: true).obs;
   Rx<Medecin> LMedecin = Medecin(codMed: '').obs;
   Rx<Medecin> LMedecinP = Medecin(codMed: '').obs;
   Rx<Medecin> LMedecinM = Medecin(codMed: '').obs;
-  final ServiceOrganisme so = ServiceOrganisme();
+  final ServiceOrganisme serviceOrganisme = ServiceOrganisme();
   RxList<Organisme> listOrganisme = List<Organisme>.empty(growable: true).obs;
+  RxList<RendezVous> listRendezVous =
+      List<RendezVous>.empty(growable: true).obs;
   Rx<Organisme> LOrganisme = Organisme().obs;
-  final ServiceExam se = ServiceExam();
+  final ServiceExam serviceExam = ServiceExam();
   RxList<Exam> listExam = List<Exam>.empty(growable: true).obs;
   Rx<Exam> LExam = Exam().obs;
-  final ServiceSalle ss = ServiceSalle();
+  final ServiceSalle serviceSalle = ServiceSalle();
   RxList<Salle> listSalle = List<Salle>.empty(growable: true).obs;
   Rx<Salle> Lsalle = Salle().obs;
-  Rx<Salle> L2salle = Salle().obs;
-  RxList<Pillar> resources = List<Pillar>.empty(growable: true).obs;
+  Rx<Salle> LsalleCentre = Salle().obs;
+  RxList<Pillar> sallesCalendar = List<Pillar>.empty(growable: true).obs;
   String? defaultLocale;
+  Rx<DateTime> date =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+          .obs;
 
   @override
-  void onInit() {
-    fetchCenter();
-    fetchMedecin();
-    fetchOrganisme();
-    fetchExam();
-    fetchSalle();
-    resources.value = [
-      Pillar(
-        head: PillarHead(
-          title: ' ',
-          object: 1,
-        ),
-        events: [
-          AgendaEvent(
-            title: 'Meeting D',
-            subtitle: 'MD',
-            backgroundColor: Colors.red,
-            start: EventTime(hour: 15, minute: 0),
-            end: EventTime(hour: 16, minute: 30),
-          ),
-          AgendaEvent(
-            title: 'Meeting Z',
-            subtitle: 'MZ',
-            start: EventTime(hour: 12, minute: 0),
-            end: EventTime(hour: 13, minute: 20),
-          ),
-        ],
-      ),
-    ];
+  List<AgendaEvent> getEvents(int codeSalle) {
+    List<AgendaEvent> listEvents = List.empty(growable: true);
+    log(listRendezVous.toString());
+    listRendezVous.forEach((element) {
+      if (element.codeSalle!.compareTo(codeSalle) == 0) {
+        log(element.codeSalle.toString());
+        log("++++++++++++++");
+        log(codeSalle.toString());
+        listEvents.add(AgendaEvent(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          title: "",
+          subtitle: element.nomCli!,
+          backgroundColor: Colors.red,
+          start: EventTime(
+              hour: DateTime.fromMillisecondsSinceEpoch(
+                      element.listRdvAndPk!.heureRdv!)
+                  .hour,
+              minute: DateTime.fromMillisecondsSinceEpoch(
+                      element.listRdvAndPk!.heureRdv!)
+                  .minute),
+          end: EventTime(
+              hour: DateTime.fromMillisecondsSinceEpoch(
+                      element.listRdvAndPk!.heureRdv!)
+                  .hour,
+              minute: DateTime.fromMillisecondsSinceEpoch(
+                          element.listRdvAndPk!.heureRdv!)
+                      .minute +
+                  15),
+        ));
+      }
+    });
+    return listEvents;
+  }
+
+  Future<void> onInit() async {
+    await fetchCenter();
+    await fetchMedecin();
+    await fetchOrganisme();
+    await fetchExam();
+    await fetchSallesByCeentre();
+    await fetchRendezVous(date.value.millisecondsSinceEpoch);
+    listSalle.forEach((element) {
+      log(element.codeSalle.toString());
+      sallesCalendar.add(Pillar(
+        head: PillarHead(title: element.designation! + "          "),
+        events: getEvents(element.codeSalle!),
+      ));
+    });
+  }
+
+  fetchRendezVous(int date) async {
+    print("***************Fetching RDV********************");
+    var RendezVous = await serviceRendezVous.RendezVous(date);
+    if (RendezVous != null) {
+      log("eeeeeeeeeeeeeeeeee");
+      log(RendezVous.toString());
+      listRendezVous.value = RendezVous;
+    }
   }
 
   String? validator(String value) {
@@ -92,6 +129,10 @@ class RendezvousController extends GetxController {
     var centers = await _serviceCenter.fetchCenter();
     if (centers != null) {
       listCenter.value = centers;
+      log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      log(centers.toString());
+      Lcenterv.value =
+          listCenter.firstWhere((element) => element.codeCentre == "0");
     }
     return listCenter;
   }
@@ -114,7 +155,7 @@ class RendezvousController extends GetxController {
 
   fetchOrganisme() async {
     print("***************Fetching Organisme********************");
-    var Organismes = await so.fetchOrganisme();
+    var Organismes = await serviceOrganisme.fetchOrganisme();
     if (Organismes != null) {
       listOrganisme.value = Organismes;
     }
@@ -122,7 +163,7 @@ class RendezvousController extends GetxController {
 
   fetchExam() async {
     print("***************Fetching Exam********************");
-    var Exames = await se.fetchExam();
+    var Exames = await serviceExam.fetchExam();
     if (Exames != null) {
       listExam.value = Exames;
     }
@@ -130,9 +171,27 @@ class RendezvousController extends GetxController {
 
   fetchSalle() async {
     print("***************Fetching Salle********************");
-    var Salles = await ss.fetchSalle();
+    var Salles = await serviceSalle.fetchSalle();
     if (Salles != null) {
       listSalle.value = Salles;
     }
+  }
+
+  fetchSallesByCeentre() async {
+    print("***************Fetching Salle********************");
+    if (Lcenterv.value.codeCentre.isNull) {
+      var Salles = await serviceSalle.fetchSalleByCentre("0");
+      if (Salles != null) {
+        listSalle.value = Salles;
+      }
+    } else {
+      var Salles =
+          await serviceSalle.fetchSalleByCentre(Lcenterv.value.codeCentre!);
+      if (Salles != null) {
+        listSalle.value = Salles;
+      }
+    }
+    log("++++++++++++++++++++++");
+    log(listSalle.toString());
   }
 }

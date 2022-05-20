@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/Services/ServiceUser.dart';
 import 'package:radiologiev2/app/data/Services/webService.dart';
@@ -144,9 +145,11 @@ class HomeView extends GetView<HomeController> {
           return Card(
             child: InkWell(
               onTap: () {
-                homeController.configuration.NomCliniqueset = cliniques.nom!;
+                homeController.configuration.NomCliniquetset = cliniques.nom!;
+                homeController.configuration.codeCli = cliniques.code!;
                 homeController.configuration.url = cliniques.url!;
                 ServiceUser.configuration.NomClinique = cliniques.nom!;
+                ServiceUser.configuration.codeCli = cliniques.code!;
                 ServiceUser.configuration.url = cliniques.url!;
                 ServiceUser.configuration.username = "";
                 Get.offAll(LoginView());
@@ -155,7 +158,7 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   ListTile(
                     leading: const Icon(
-                      Icons.local_hospital,
+                      FontAwesomeIcons.hospital,
                       color: Color.fromRGBO(0, 147, 189, 0.9),
                     ),
                     title: Center(

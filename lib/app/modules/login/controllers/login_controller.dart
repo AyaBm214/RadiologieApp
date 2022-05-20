@@ -27,10 +27,14 @@ class LoginController extends GetxController {
       print(ServiceUser.token);
       if (ServiceUser.token == "200") {
         Get.snackbar('Login', 'Login successfully',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
         Get.toNamed(Routes.LIST_COMPTES_RENDUS);
       } else {
         Get.snackbar('Login', 'Invalid email or password',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       }
     });

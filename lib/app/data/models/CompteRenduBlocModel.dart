@@ -1,112 +1,113 @@
 // To parse this JSON data, do
 //
-//     final compteRendu = compteRenduFromJson(jsonString);
+//     final compteRenduBloc = compteRenduBlocFromJson(jsonString);
 
 import 'dart:convert';
 
-List<CompteRendu> postFromJson(String str) =>
-    List<CompteRendu>.from(json.decode(str).map((x) => CompteRendu.fromMap(x)));
+CompteRenduBloc compteRenduBlocFromJson(String str) =>
+    CompteRenduBloc.fromMap(json.decode(str));
 
-String compteRenduToJson(CompteRendu data) => json.encode(data.toJson());
+String compteRenduBlocToJson(CompteRenduBloc data) =>
+    json.encode(data.toJson());
 
-class CompteRendu {
-  CompteRendu({
-    required this.listCompteRenduAndPk,
-    this.v,
-    this.nDossier,
-    this.patient,
-    this.datNai,
-    this.sex,
-    this.designation,
-    this.observ,
-    this.date,
-    this.heure,
-    this.medecinDictee,
-    this.cdeMedPres,
-    this.codeCentre,
-    this.centre,
-    this.codeSalle,
-    this.salle,
-    this.identifiant,
-    this.termine,
-    this.entreeSalle,
-    this.sortieSalle,
-    this.dureeAttente,
-    this.dureeensalle,
+class CompteRenduBloc {
+  CompteRenduBloc({
+    required this.listCompteRenduBlocAndPk,
+    required this.v,
+    required this.nDossier,
+    required this.patient,
+    required this.datNai,
+    required this.sex,
+    required this.designation,
+    required this.observ,
+    required this.date,
+    required this.heure,
+    required this.medecinDictee,
+    required this.cdeMedPres,
+    required this.codeCentre,
+    required this.centre,
+    required this.codeSalle,
+    required this.salle,
+    required this.identifiant,
+    required this.termine,
+    required this.entreeSalle,
+    required this.sortieSalle,
+    required this.dureeAttente,
+    required this.dureeensalle,
     this.dureeattenteArriv,
-    this.dureeEnSalleEnMinute,
-    this.validerMedDictee,
-    this.typeExamen,
-    this.resultat,
-    this.facture,
+    required this.dureeEnSalleEnMinute,
+    required this.validerMedDictee,
+    required this.typeExamen,
+    required this.resultat,
+    required this.facture,
     this.dateImp,
-    this.imprimer,
-    this.dateExecution,
-    this.livre,
-    this.dicte,
-    this.dicteEnCours,
+    required this.imprimer,
+    required this.dateExecution,
+    required this.livre,
+    required this.dicte,
+    required this.dicteEnCours,
     this.arriveCentre,
-    this.rensClin,
-    this.hasHist,
-    this.hasimgRadio,
-    this.arrivee,
-    this.prepare,
-    this.enSalle,
-    this.cptEncours,
-    this.etat,
-    this.ndossier,
-    this.medPres,
+    required this.rensClin,
+    required this.hasHist,
+    required this.hasimgRadio,
+    required this.arrivee,
+    required this.prepare,
+    required this.enSalle,
+    required this.cptEncours,
+    required this.etat,
+    required this.ndossier,
+    required this.medPres,
   });
 
-  ListCompteRenduAndPk listCompteRenduAndPk;
-  bool? v;
-  dynamic nDossier;
-  String? patient;
-  dynamic datNai;
-  bool? sex;
-  dynamic designation;
-  dynamic observ;
-  dynamic date;
-  dynamic heure;
-  dynamic medecinDictee;
-  dynamic cdeMedPres;
-  dynamic codeCentre;
-  dynamic centre;
-  dynamic codeSalle;
-  dynamic salle;
-  dynamic identifiant;
-  bool? termine;
-  dynamic entreeSalle;
-  dynamic sortieSalle;
-  dynamic dureeAttente;
-  dynamic dureeensalle;
+  ListCompteRenduBlocAndPk listCompteRenduBlocAndPk;
+  bool v;
+  String nDossier;
+  String patient;
+  int datNai;
+  bool sex;
+  String designation;
+  String observ;
+  int date;
+  int heure;
+  String medecinDictee;
+  String cdeMedPres;
+  String codeCentre;
+  String centre;
+  int codeSalle;
+  String salle;
+  String identifiant;
+  bool termine;
+  int entreeSalle;
+  int sortieSalle;
+  String dureeAttente;
+  String dureeensalle;
   dynamic dureeattenteArriv;
-  dynamic dureeEnSalleEnMinute;
-  bool? validerMedDictee;
-  dynamic typeExamen;
-  bool? resultat;
-  bool? facture;
+  int dureeEnSalleEnMinute;
+  bool validerMedDictee;
+  String typeExamen;
+  bool resultat;
+  bool facture;
   dynamic dateImp;
-  bool? imprimer;
-  dynamic dateExecution;
-  bool? livre;
-  bool? dicte;
-  bool? dicteEnCours;
+  bool imprimer;
+  String dateExecution;
+  bool livre;
+  bool dicte;
+  bool dicteEnCours;
   dynamic arriveCentre;
-  dynamic rensClin;
-  bool? hasHist;
-  bool? hasimgRadio;
-  bool? arrivee;
-  bool? prepare;
-  bool? enSalle;
-  bool? cptEncours;
-  dynamic etat;
-  dynamic ndossier;
-  dynamic medPres;
+  String rensClin;
+  bool hasHist;
+  bool hasimgRadio;
+  bool arrivee;
+  bool prepare;
+  bool enSalle;
+  bool cptEncours;
+  String etat;
+  String ndossier;
+  String medPres;
 
-  factory CompteRendu.fromMap(Map<String, dynamic> json) => CompteRendu(
-        listCompteRenduAndPk:
-            ListCompteRenduAndPk.fromJson(json["listCompteRenduAndPK"]),
+  factory CompteRenduBloc.fromMap(Map<String, dynamic> json) => CompteRenduBloc(
+        listCompteRenduBlocAndPk:
+            ListCompteRenduBlocAndPk.fromMap(json["listCompteRenduBlocAndPK"]),
         v: json["v"],
         nDossier: json["nDossier"],
         patient: json["patient"],
@@ -154,7 +155,7 @@ class CompteRendu {
       );
 
   Map<String, dynamic> toJson() => {
-        "listCompteRenduAndPK": listCompteRenduAndPk.toJson(),
+        "listCompteRenduBlocAndPK": listCompteRenduBlocAndPk.toJson(),
         "v": v,
         "nDossier": nDossier,
         "patient": patient,
@@ -200,15 +201,10 @@ class CompteRendu {
         "ndossier": ndossier,
         "medPres": medPres,
       };
-
-  @override
-  String toString() {
-    return 'CompteRendu{listCompteRenduAndPk: $listCompteRenduAndPk, v: $v, nDossier: $nDossier, patient: $patient, datNai: $datNai, sex: $sex, designation: $designation, observ: $observ, date: $date, heure: $heure, medecinDictee: $medecinDictee, cdeMedPres: $cdeMedPres, codeCentre: $codeCentre, centre: $centre, codeSalle: $codeSalle, salle: $salle, identifiant: $identifiant, termine: $termine, entreeSalle: $entreeSalle, sortieSalle: $sortieSalle, dureeAttente: $dureeAttente, dureeensalle: $dureeensalle, dureeattenteArriv: $dureeattenteArriv, dureeEnSalleEnMinute: $dureeEnSalleEnMinute, validerMedDictee: $validerMedDictee, typeExamen: $typeExamen, resultat: $resultat, facture: $facture, dateImp: $dateImp, imprimer: $imprimer, dateExecution: $dateExecution, livre: $livre, dicte: $dicte, dicteEnCours: $dicteEnCours, arriveCentre: $arriveCentre, rensClin: $rensClin, hasHist: $hasHist, hasimgRadio: $hasimgRadio, arrivee: $arrivee, prepare: $prepare, enSalle: $enSalle, cptEncours: $cptEncours, etat: $etat, ndossier: $ndossier, medPres: $medPres}';
-  }
 }
 
-class ListCompteRenduAndPk {
-  ListCompteRenduAndPk({
+class ListCompteRenduBlocAndPk {
+  ListCompteRenduBlocAndPk({
     required this.codeExam,
     required this.codeExamen,
   });
@@ -216,8 +212,8 @@ class ListCompteRenduAndPk {
   String codeExam;
   String codeExamen;
 
-  factory ListCompteRenduAndPk.fromJson(Map<String, dynamic> json) =>
-      ListCompteRenduAndPk(
+  factory ListCompteRenduBlocAndPk.fromMap(Map<String, dynamic> json) =>
+      ListCompteRenduBlocAndPk(
         codeExam: json["codeExam"],
         codeExamen: json["codeExamen"],
       );

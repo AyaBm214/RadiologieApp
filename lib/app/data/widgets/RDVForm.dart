@@ -32,78 +32,85 @@ class FormulaireView extends GetView<RendezvousController> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                AppBar(
-                  backgroundColor: Colors.white,
-                  leading: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Exit?'),
-                            content:
-                                const Text('are you sure you want to  exit?'),
-                            actions: [
-                              GestureDetector(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Get.to(RendezvousView());
-                                  },
-                                  child: const Text("yes"),
-                                ),
-                              ),
-                              GestureDetector(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Get.back();
-                                  },
-                                  child: const Text("No"),
-                                ),
-                              ),
-                            ],
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AppBar(
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      leading: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Exit?'),
+                                content: const Text(
+                                    'are you sure you want to  exit?'),
+                                actions: [
+                                  GestureDetector(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.to(RendezvousView());
+                                      },
+                                      child: const Text("yes"),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      child: const Text("No"),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           );
+                          // Navigator.pop(context);
                         },
-                      );
-                      // Navigator.pop(context);
-                    },
-                  ),
-                  elevation: 0,
-                  title: const Text(
-                    'Rendez-Vous',
-                    style: TextStyle(
-                        letterSpacing: 5,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.black,
-                        fontSize: 18),
-                  ),
-                  actions: <Widget>[
-                    IconButton(
-                      icon: const Icon(
-                        Icons.verified_outlined,
-                        color: Colors.black,
-                        size: 30,
                       ),
-                      onPressed: () {
-                        if (form_rdv.currentState!.validate()) {
-                          print(rdv.toString());
-                          {
-                            Get.snackbar(
-                                'Confirmation', 'RendezVous Confirmée ',
-                                snackPosition: SnackPosition.BOTTOM);
-                            Get.toNamed(Routes.LIST_COMPTES_RENDUS);
-                          }
-                        } else {
-                          Get.snackbar('Error', 'RendezVous non Confirmée',
-                              snackPosition: SnackPosition.BOTTOM);
-                        }
-                      },
+                      elevation: 0,
+                      title: Container(
+                        child: const Text(
+                          'Rendez-Vous',
+                          style: TextStyle(
+                              letterSpacing: 5,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white,
+                              fontSize: 18),
+                        ),
+                      ),
+                      actions: <Widget>[
+                        IconButton(
+                          icon: const Icon(
+                            Icons.verified_outlined,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            if (form_rdv.currentState!.validate()) {
+                              print(rdv.toString());
+                              {
+                                Get.snackbar(
+                                    'Confirmation', 'RendezVous Confirmée ',
+                                    snackPosition: SnackPosition.BOTTOM);
+                                Get.toNamed(Routes.LIST_COMPTES_RENDUS);
+                              }
+                            } else {
+                              Get.snackbar('Error', 'RendezVous non Confirmée',
+                                  snackPosition: SnackPosition.BOTTOM);
+                            }
+                          },
+                        ),
+                      ],
+                      centerTitle: true,
                     ),
-                  ],
-                  centerTitle: true,
+                  ),
                 ),
                 Container(
                     alignment: Alignment.center,
@@ -119,18 +126,18 @@ class FormulaireView extends GetView<RendezvousController> {
                                     : element.designCentre!.toString())
                                 .toList(),
                             onChanged: (value) => {
-                                  rdv.Centre = value!,
+                                  rdv.centre = value!,
                                   print(value),
                                   rendezvousController.listCenter.value
                                       .forEach((element) {
                                     if (element.designCentre == value) {
-                                      rendezvousController.L2centerv.value =
+                                      rendezvousController.LcentervRDV.value =
                                           element;
                                     }
                                   }),
                                 },
                             selectedItem: rendezvousController
-                                .L2centerv.value.designCentre,
+                                .LcentervRDV.value.designCentre,
                             dropdownSearchDecoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
                                 hintText: "Select Center",
@@ -171,7 +178,13 @@ class FormulaireView extends GetView<RendezvousController> {
                                     : element.designation!.toString())
                                 .toList(),
                             onChanged: (value) => {
-                                  rdv.Salle = value!,
+                                  rdv.codeSalle = rendezvousController
+                                      .listSalle.value
+                                      .firstWhere((element) =>
+                                          element.designation!
+                                              .compareTo(value!) ==
+                                          0)
+                                      .codeSalle,
                                   print(value),
                                   rendezvousController.listSalle.value
                                       .forEach((element) {
@@ -221,7 +234,7 @@ class FormulaireView extends GetView<RendezvousController> {
                                 .map((element) => element.nomMed.toString())
                                 .toList(),
                             onChanged: (value) => {
-                                  rdv.medecinM = value!,
+                                  rdv.nomMed = value!,
                                   print(value),
                                   rendezvousController.listMedecin.value
                                       .forEach((element) {
@@ -576,7 +589,7 @@ class FormulaireView extends GetView<RendezvousController> {
                                   color: Get.theme.primaryColor, width: 1.0))),
                       initialCountryCode: 'TN',
                       onChanged: (value) {
-                        rdv.tel = value;
+                        rdv.tel = value.number;
                         print(value);
                       },
                     )),
@@ -613,7 +626,7 @@ class FormulaireView extends GetView<RendezvousController> {
                                   color: Get.theme.primaryColor, width: 1.0))),
                       initialCountryCode: 'TN',
                       onChanged: (value) {
-                        rdv.telperson = value;
+                        rdv.telperson = value.number;
                         print(value);
                       },
                     )),

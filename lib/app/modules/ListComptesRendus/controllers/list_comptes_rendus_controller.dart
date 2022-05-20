@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/Services/ServiceCompteRendu.dart';
 import 'package:radiologiev2/app/data/models/CompteRmodel.dart';
+import 'package:radiologiev2/app/data/models/authentification.dart';
 
 class ListComptesRendusController extends GetxController {
   final ServiceCompteRendu serviceCompteRendu = ServiceCompteRendu();
@@ -9,6 +10,7 @@ class ListComptesRendusController extends GetxController {
   RxBool isLoaded = false.obs;
   RxBool isSearching = false.obs;
   RxString searchInput = "".obs;
+  Authentification configuration = Authentification();
 
   @override
   void onInit() {
@@ -25,7 +27,6 @@ class ListComptesRendusController extends GetxController {
       Patienttrouve.value = listCompte;
       // ignore: empty_statements
     }
-    print("liste compte ${listCompte}".toString());
     return listCompte;
   }
 

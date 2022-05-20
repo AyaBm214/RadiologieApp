@@ -7,6 +7,8 @@ import '../modules/Exploitation/views/exploitation_view.dart';
 import '../modules/ListComptesRendus/bindings/list_comptes_rendus_binding.dart';
 import '../modules/ListComptesRendus/views/list_comptes_rendus_view.dart';
 import '../modules/Rendezvous/views/rendezvous_view.dart';
+import '../modules/detailsCompteRendu/bindings/details_compte_rendu_binding.dart';
+import '../modules/detailsCompteRendu/views/details_compte_rendu_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/radio/views/radio_view.dart';
@@ -47,13 +49,18 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EXPLOITATION,
-      page: () => ExploitationView(),
+      page: () => ExplorationView(),
       binding: ExploitationBinding(),
     ),
     GetPage(
       name: _Paths.BLOC,
       page: () => BlocView(),
       binding: BlocBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAILS_COMPTE_RENDU,
+      page: () => DetailsCompteRenduView(),
+      binding: DetailsCompteRenduBinding(),
     ),
   ];
 }

@@ -9,11 +9,12 @@ abstract class Routes {
   static const CONSOLE = _Paths.CONSOLE;
   static const ACCEUIL = _Paths.ACCEUIL;
   static const RADIO = _Paths.ACCEUIL + _Paths.RADIO;
-  static const RENDEZVOUS = _Paths.ACCEUIL + _Paths.RENDEZVOUS;
-  static const DECONNEXION = _Paths.ACCEUIL + _Paths.DECONNEXION;
+  static const RENDEZVOUS = _Paths.RENDEZVOUS;
+  static const DECONNEXION = _Paths.DECONNEXION;
   static const LIST_COMPTES_RENDUS = _Paths.LIST_COMPTES_RENDUS;
   static const EXPLOITATION = _Paths.EXPLOITATION;
   static const BLOC = _Paths.BLOC;
+  static const DETAILS_COMPTE_RENDU = _Paths.DETAILS_COMPTE_RENDU;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const LIST_COMPTES_RENDUS = '/list-comptes-rendus';
   static const EXPLOITATION = '/exploitation';
   static const BLOC = '/bloc';
+  static const DETAILS_COMPTE_RENDU = '/details-compte-rendu';
 }

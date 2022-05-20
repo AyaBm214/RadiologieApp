@@ -19,11 +19,21 @@ class RendezvousView extends GetView<RendezvousController> {
   late String codeDialog;
   final RendezvousController SalleAgendaController =
       Get.put(RendezvousController());
+  final datearrivee = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    /*rendezvousController.fetchSallesByCeentre();
+    rendezvousController.fetchRendezVous();
+    rendezvousController.listSalle.forEach((element) {
+      log(element.codeSalle.toString());
+      rendezvousController.sallesCalendar.add(Pillar(
+        head: PillarHead(title: element.designation!),
+        events: rendezvousController.getEvents(element.codeSalle!),
+      ));
+    });
     print("**********************************");
-    print(rendezvousController.listSalle);
+    print(rendezvousController.listSalle);*/
     return Scaffold(
         drawer: NavigationDrawer(),
         appBar: AppBar(
@@ -38,21 +48,19 @@ class RendezvousView extends GetView<RendezvousController> {
                           ? element.designCentre.toString()
                           : element.designCentre!.toString())
                       .toList(),
-                  onChanged: (value) => {
-                        rendezvousController.listCenter.value
-                            .forEach((element) {
-                          if (element.designCentre == value) {
-                            rendezvousController.Lcenterv.value = element;
-                          }
-                        }),
-                      },
+                  onChanged: (value) {
+                    rendezvousController.Lcenterv.value = rendezvousController
+                        .listCenter.value
+                        .firstWhere((element) =>
+                            element.designCentre!.compareTo(value!) == 0);
+                    rendezvousController.fetchSallesByCeentre();
+                  },
                   selectedItem:
                       rendezvousController.Lcenterv.value.designCentre,
                   dropdownSearchDecoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(8),
                     hintStyle: const TextStyle(color: Colors.white),
                     prefixIcon: const Icon(Icons.business),
-                    hintText: "Tous Les Centres ",
                     labelStyle: TextStyle(
                       color: Get.theme.primaryColor,
                       fontWeight: FontWeight.w700,
@@ -83,62 +91,43 @@ class RendezvousView extends GetView<RendezvousController> {
           child: const Icon(Icons.add),
         ),
         body: Column(children: [
-          Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(12),
-              child: SizedBox(
-                child: Obx(
-                  () => DropdownSearch<String>(
-                      mode: Mode.BOTTOM_SHEET,
-                      showSearchBox: true,
-                      items: rendezvousController.listSalle
-                          .map((element) => defaultLocale == "ar"
-                              ? element.designation.toString()
-                              : element.designation!.toString())
-                          .toList(),
-                      onChanged: (value) => {
-                            print(value),
-                            rendezvousController.listSalle.value
-                                .forEach((element) {
-                              if (element.designation == value) {
-                                rendezvousController.L2salle.value = element;
-                              }
-                            }),
-                          },
-                      selectedItem:
-                          rendezvousController.L2salle.value.designation,
-                      dropdownSearchDecoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10),
-                          hintText: "List des Salles",
-                          hintStyle: const TextStyle(color: Colors.blueGrey),
-                          prefixIcon: const Icon(Icons.home_outlined),
-                          labelStyle: TextStyle(
-                            color: Get.theme.primaryColor,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                                color: Get.theme.primaryColor, width: 1.0),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              borderSide: BorderSide(
-                                  color: Get.theme.primaryColor, width: 1.0)))),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              readOnly: true,
+              controller: datearrivee,
+              decoration: InputDecoration(
+                hintText: 'Pick your Date',
+                contentPadding: const EdgeInsets.all(5),
+                prefixIcon: const Icon(Icons.calendar_today_outlined),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-              )),
-          Expanded(
-            child: AgendaView(
-              agendaStyle: const AgendaStyle(
-                startHour: 9,
-                endHour: 20,
-                pillarSeperator: false,
-                visibleTimeBorder: true,
-                timeItemWidth: 40,
-                timeItemHeight: 160,
               ),
-              pillarList: rendezvousController.resources.value,
+              onTap: () async {
+                var date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2090));
+                datearrivee.text = date.toString().substring(0, 10);
+                rendezvousController.date.value = date!;
+                // rendezvousCont
+              },
             ),
+          ),
+          Expanded(
+            child: Obx(() => AgendaView(
+                  agendaStyle: const AgendaStyle(
+                    startHour: 7,
+                    endHour: 22,
+                    pillarSeperator: false,
+                    visibleTimeBorder: true,
+                    timeItemWidth: 70,
+                    timeItemHeight: 160,
+                  ),
+                  pillarList: rendezvousController.sallesCalendar.value,
+                )),
           )
         ]));
   }
