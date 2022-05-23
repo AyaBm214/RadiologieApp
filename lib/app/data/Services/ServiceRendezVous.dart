@@ -7,21 +7,26 @@ import 'package:radiologiev2/app/data/models/RendezVousModel.dart';
 import 'ServiceUser.dart';
 
 class ServiceRendezVous {
-  Future RendezVous(int date) async {
+  Future RendezVous(int date, String codeCentre) async {
     log(ServiceUser.configuration.url! +
         '/radiologie/api/listrdvands/filterByDateAndCentreAndSalle?dateDebut=' +
         date.toString() +
         '&dateFin=' +
-        date.toString());
+        (date + 86400000).toString() +
+        '&codeCentre=' +
+        codeCentre);
     final response = await http.get(Uri.parse(ServiceUser.configuration.url! +
         '/radiologie/api/listrdvands/filterByDateAndCentreAndSalle?dateDebut=' +
         date.toString() +
         '&dateFin=' +
-        date.toString()));
+        (date + 86400000).toString() +
+        '&codeCentre=' +
+        codeCentre));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      log(parsed.toString());
       return rendezVousFromJson(response.body);
     } else {
       // If the server did not return a 200 OK response,

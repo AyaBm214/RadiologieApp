@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/models/CompteRenduBlocModel.dart';
@@ -22,29 +23,29 @@ class BlocView extends GetView<BlocController> {
       drawer: NavigationDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        /*title: SizedBox(
+        title: SizedBox(
           child: Obx(
             () => !CompteBlocController.isSearching.value
                 ? DropdownSearch<String>(
                     mode: Mode.BOTTOM_SHEET,
                     showSearchBox: true,
-                    items: rendezvousController.listCenter
+                    items: CompteBlocController.listCenter
                         .map((element) => defaultLocale == "ar"
                             ? element.designCentre.toString()
                             : element.designCentre!.toString())
                         .toList(),
                     onChanged: (value) => {
-                          rendezvousController.listCenter.value
+                          CompteBlocController.listCenter.value
                               .forEach((element) {
                             if (element.designCentre == value) {
-                              rendezvousController.LcentervCR.value = element;
-                              print(rendezvousController
+                              CompteBlocController.LcentervCR.value = element;
+                              print(CompteBlocController
                                   .LcentervCR.value.codeCentre);
                             }
                           }),
                         },
                     selectedItem:
-                        rendezvousController.LcentervCR.value.designCentre,
+                        CompteBlocController.LcentervCR.value.designCentre,
                     dropdownSearchDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(8),
                       hintText: "Tous Les Centres",
@@ -71,7 +72,7 @@ class BlocView extends GetView<BlocController> {
                     ),
                   ),
           ),
-        ),*/
+        ),
         centerTitle: true,
         actions: [
           Row(

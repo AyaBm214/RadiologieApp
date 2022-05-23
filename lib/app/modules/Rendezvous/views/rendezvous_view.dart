@@ -23,17 +23,6 @@ class RendezvousView extends GetView<RendezvousController> {
 
   @override
   Widget build(BuildContext context) {
-    /*rendezvousController.fetchSallesByCeentre();
-    rendezvousController.fetchRendezVous();
-    rendezvousController.listSalle.forEach((element) {
-      log(element.codeSalle.toString());
-      rendezvousController.sallesCalendar.add(Pillar(
-        head: PillarHead(title: element.designation!),
-        events: rendezvousController.getEvents(element.codeSalle!),
-      ));
-    });
-    print("**********************************");
-    print(rendezvousController.listSalle);*/
     return Scaffold(
         drawer: NavigationDrawer(),
         appBar: AppBar(
@@ -48,12 +37,18 @@ class RendezvousView extends GetView<RendezvousController> {
                           ? element.designCentre.toString()
                           : element.designCentre!.toString())
                       .toList(),
-                  onChanged: (value) {
+                  onChanged: (value) async {
                     rendezvousController.Lcenterv.value = rendezvousController
                         .listCenter.value
                         .firstWhere((element) =>
                             element.designCentre!.compareTo(value!) == 0);
-                    rendezvousController.fetchSallesByCeentre();
+                    rendezvousController.listSalle.clear();
+                    await rendezvousController.fetchSallesByCeentre(
+                        rendezvousController.Lcenterv.value.codeCentre!);
+                    await rendezvousController.fetchRendezVous(
+                        rendezvousController.date.value.millisecondsSinceEpoch);
+                    rendezvousController.sallesCalendar.clear();
+                    await rendezvousController.fetchEvents();
                   },
                   selectedItem:
                       rendezvousController.Lcenterv.value.designCentre,
@@ -97,7 +92,11 @@ class RendezvousView extends GetView<RendezvousController> {
               readOnly: true,
               controller: datearrivee,
               decoration: InputDecoration(
-                hintText: 'Pick your Date',
+                hintText: rendezvousController.date.value.year.toString() +
+                    "-" +
+                    rendezvousController.date.value.month.toString() +
+                    "-" +
+                    rendezvousController.date.value.day.toString(),
                 contentPadding: const EdgeInsets.all(5),
                 prefixIcon: const Icon(Icons.calendar_today_outlined),
                 border: OutlineInputBorder(
@@ -112,6 +111,10 @@ class RendezvousView extends GetView<RendezvousController> {
                     lastDate: DateTime(2090));
                 datearrivee.text = date.toString().substring(0, 10);
                 rendezvousController.date.value = date!;
+                await rendezvousController.fetchRendezVous(
+                    rendezvousController.date.value.millisecondsSinceEpoch);
+                rendezvousController.sallesCalendar.clear();
+                await rendezvousController.fetchEvents();
                 // rendezvousCont
               },
             ),
@@ -119,11 +122,13 @@ class RendezvousView extends GetView<RendezvousController> {
           Expanded(
             child: Obx(() => AgendaView(
                   agendaStyle: const AgendaStyle(
+                    pillarHeadWidth: 200,
+                    pillarHeadHeight: 60,
                     startHour: 7,
                     endHour: 22,
                     pillarSeperator: false,
                     visibleTimeBorder: true,
-                    timeItemWidth: 70,
+                    timeItemWidth: 50,
                     timeItemHeight: 160,
                   ),
                   pillarList: rendezvousController.sallesCalendar.value,

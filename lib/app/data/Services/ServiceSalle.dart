@@ -37,6 +37,8 @@ class ServiceSalle {
       // then parse the JSON.
       List<Salle> list = sallesFromJson(utf8.decode(response.bodyBytes));
       sallesByCentre = list;
+      log("hhhhhhhhhhhhhhhhhh");
+      log(list.toString());
       return list;
     } else {
       // If the server did not return a 200 OK response,

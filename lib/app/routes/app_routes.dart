@@ -15,6 +15,10 @@ abstract class Routes {
   static const EXPLOITATION = _Paths.EXPLOITATION;
   static const BLOC = _Paths.BLOC;
   static const DETAILS_COMPTE_RENDU = _Paths.DETAILS_COMPTE_RENDU;
+  static const DICTER = _Paths.DICTER;
+  static const VIEWER = _Paths.VIEWER;
+  static const PLAYER = _Paths.PLAYER;
+  static const PDF = _Paths.PDF;
 }
 
 abstract class _Paths {
@@ -31,4 +35,8 @@ abstract class _Paths {
   static const EXPLOITATION = '/exploitation';
   static const BLOC = '/bloc';
   static const DETAILS_COMPTE_RENDU = '/details-compte-rendu';
+  static const DICTER = '/dicter';
+  static const VIEWER = '/viewer';
+  static const PLAYER = '/player';
+  static const PDF = '/pdf';
 }

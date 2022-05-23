@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
+import 'package:radiologiev2/app/data/Services/ServiceCenter.dart';
 import 'package:radiologiev2/app/data/Services/ServiceCompteRendu.dart';
+import 'package:radiologiev2/app/data/models/CenterModel.dart';
 import 'package:radiologiev2/app/data/models/CompteRmodel.dart';
 import 'package:radiologiev2/app/data/models/authentification.dart';
 
@@ -7,6 +11,10 @@ class ListComptesRendusController extends GetxController {
   final ServiceCompteRendu serviceCompteRendu = ServiceCompteRendu();
   RxList<CompteRendu> listCompte = List<CompteRendu>.empty(growable: true).obs;
   RxList<CompteRendu> Patienttrouve = <CompteRendu>[].obs;
+  RxList<Centerv> listCenter = List<Centerv>.empty(growable: true).obs;
+  Rx<Centerv> LcentervCR = Centerv().obs;
+  final ServiceCenter _serviceCenter = ServiceCenter();
+
   RxBool isLoaded = false.obs;
   RxBool isSearching = false.obs;
   RxString searchInput = "".obs;
@@ -15,6 +23,7 @@ class ListComptesRendusController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    fetchCenter();
     fetchCompteRendu();
     isLoaded.value = false;
   }
@@ -42,5 +51,18 @@ class ListComptesRendusController extends GetxController {
             .contains(input.toLowerCase()))
         .toList();
     Patienttrouve.value = results.obs;
+  }
+
+  fetchCenter() async {
+    print("***************Fetching center********************");
+    var centers = await _serviceCenter.fetchCenter();
+    if (centers != null) {
+      listCenter.value = centers;
+      log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      log(centers.toString());
+      LcentervCR.value =
+          listCenter.firstWhere((element) => element.codeCentre == "0");
+    }
+    return listCenter;
   }
 }

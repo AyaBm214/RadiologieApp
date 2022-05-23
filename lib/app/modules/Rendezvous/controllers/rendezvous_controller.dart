@@ -53,13 +53,17 @@ class RendezvousController extends GetxController {
   List<AgendaEvent> getEvents(int codeSalle) {
     List<AgendaEvent> listEvents = List.empty(growable: true);
     log(listRendezVous.toString());
+
     listRendezVous.forEach((element) {
+      log("qqqqqqqqqqqqqqqqqqq");
+      log(element.codeSalle!.toString());
+      log(codeSalle.toString());
       if (element.codeSalle!.compareTo(codeSalle) == 0) {
         log(element.codeSalle.toString());
         log("++++++++++++++");
         log(codeSalle.toString());
         listEvents.add(AgendaEvent(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          //padding: EdgeInsets.symmetric(horizontal: 30),
           title: "",
           subtitle: element.nomCli!,
           backgroundColor: Colors.red,
@@ -89,12 +93,17 @@ class RendezvousController extends GetxController {
     await fetchMedecin();
     await fetchOrganisme();
     await fetchExam();
-    await fetchSallesByCeentre();
     await fetchRendezVous(date.value.millisecondsSinceEpoch);
+    await fetchSallesByCeentre(Lcenterv.value.codeCentre!);
+
+    fetchEvents();
+  }
+
+  fetchEvents() {
     listSalle.forEach((element) {
       log(element.codeSalle.toString());
       sallesCalendar.add(Pillar(
-        head: PillarHead(title: element.designation! + "          "),
+        head: PillarHead(title: element.designation!, width: 200),
         events: getEvents(element.codeSalle!),
       ));
     });
@@ -102,7 +111,8 @@ class RendezvousController extends GetxController {
 
   fetchRendezVous(int date) async {
     print("***************Fetching RDV********************");
-    var RendezVous = await serviceRendezVous.RendezVous(date);
+    var RendezVous =
+        await serviceRendezVous.RendezVous(date, Lcenterv.value.codeCentre!);
     if (RendezVous != null) {
       log("eeeeeeeeeeeeeeeeee");
       log(RendezVous.toString());
@@ -177,20 +187,14 @@ class RendezvousController extends GetxController {
     }
   }
 
-  fetchSallesByCeentre() async {
+  fetchSallesByCeentre(String codeCenter) async {
     print("***************Fetching Salle********************");
-    if (Lcenterv.value.codeCentre.isNull) {
-      var Salles = await serviceSalle.fetchSalleByCentre("0");
-      if (Salles != null) {
-        listSalle.value = Salles;
-      }
-    } else {
-      var Salles =
-          await serviceSalle.fetchSalleByCentre(Lcenterv.value.codeCentre!);
-      if (Salles != null) {
-        listSalle.value = Salles;
-      }
+
+    var Salles = await serviceSalle.fetchSalleByCentre(codeCenter);
+    if (Salles != null) {
+      listSalle.value = Salles;
     }
+
     log("++++++++++++++++++++++");
     log(listSalle.toString());
   }

@@ -47,7 +47,7 @@ Widget buildListCompteRendu() {
                         label: 'Détails',
                       ),
                       SlidableAction(
-                        onPressed: doNothing,
+                        onPressed: (context) => Get.toNamed(Routes.DICTER),
                         backgroundColor: Color(0xFF21B7CA),
                         foregroundColor: Colors.white,
                         icon: Icons.mic,
@@ -62,20 +62,20 @@ Widget buildListCompteRendu() {
                       ),
                     ],
                   ),
-                  endActionPane: const ActionPane(
+                  endActionPane: ActionPane(
                     motion: ScrollMotion(),
                     children: [
                       SlidableAction(
                         // An action can be bigger than the others.
                         flex: 2,
-                        onPressed: doNothing,
+                        onPressed: (context) => Get.toNamed(Routes.PDF),
                         backgroundColor: Color(0xFF7BC043),
                         foregroundColor: Colors.white,
                         icon: FontAwesomeIcons.filePdf,
                         label: 'Compte Rendu',
                       ),
                       SlidableAction(
-                        onPressed: doNothing,
+                        onPressed: (context) => Get.toNamed(Routes.PLAYER),
                         backgroundColor: Color(0xFF0392CF),
                         foregroundColor: Colors.white,
                         icon: FontAwesomeIcons.headphones,

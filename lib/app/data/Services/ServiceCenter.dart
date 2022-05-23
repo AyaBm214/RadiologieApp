@@ -8,8 +8,8 @@ import 'package:radiologiev2/app/data/models/CenterModel.dart';
 class ServiceCenter {
   static List<Centerv> listCenter = List.empty(growable: true);
   Future<List<Centerv>> fetchCenter() async {
-    final response = await http.get(
-        Uri.parse(ServiceUser.configuration.url! + '/radiologie/api/centres'));
+    final response = await http.get(Uri.parse(ServiceUser.configuration.url! +
+        '/radiologie/api/centres/getAllCentresRDV'));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.

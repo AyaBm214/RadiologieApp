@@ -100,7 +100,7 @@ class CompteRendu {
   bool? prepare;
   bool? enSalle;
   bool? cptEncours;
-  dynamic etat;
+  String? etat;
   dynamic ndossier;
   dynamic medPres;
 

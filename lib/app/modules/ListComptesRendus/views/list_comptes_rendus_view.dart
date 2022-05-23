@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:radiologiev2/app/data/models/CompteRmodel.dart';
@@ -22,29 +23,28 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
       drawer: NavigationDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
-        /*title: SizedBox(
+        title: SizedBox(
           child: Obx(
             () => !CompteController.isSearching.value
                 ? DropdownSearch<String>(
                     mode: Mode.BOTTOM_SHEET,
                     showSearchBox: true,
-                    items: rendezvousController.listCenter
+                    items: CompteController.listCenter
                         .map((element) => defaultLocale == "ar"
                             ? element.designCentre.toString()
                             : element.designCentre!.toString())
                         .toList(),
                     onChanged: (value) => {
-                          rendezvousController.listCenter.value
-                              .forEach((element) {
+                          CompteController.listCenter.value.forEach((element) {
                             if (element.designCentre == value) {
-                              rendezvousController.LcentervCR.value = element;
-                              print(rendezvousController
-                                  .LcentervCR.value.codeCentre);
+                              CompteController.LcentervCR.value = element;
+                              print(
+                                  CompteController.LcentervCR.value.codeCentre);
                             }
                           }),
                         },
                     selectedItem:
-                        rendezvousController.LcentervCR.value.designCentre,
+                        CompteController.LcentervCR.value.designCentre,
                     dropdownSearchDecoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(8),
                       hintText: "Tous Les Centres",
@@ -70,7 +70,7 @@ class ListComptesRendusView extends GetView<ListComptesRendusController> {
                     ),
                   ),
           ),
-        ),*/
+        ),
         centerTitle: true,
         actions: [
           Row(
