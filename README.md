@@ -1,16 +1,22 @@
 # radiologiev2
 
-radiologie
+The Radiology Reports Application is designed to facilitate easy access to radiology reports for both doctors and patients. Using Flutter, the app provides a seamless and intuitive interface for viewing, managing, and sharing radiology reports. Secure login mechanisms ensure that sensitive medical data is protected.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+Flutter SDK
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Android Studio or Xcode (for iOS)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A code editor like Visual Studio Code
+## Technologies Used 
+Flutter: For building the mobile application.
+
+Firebase: For backend services including authentication, database, and storage.
+
+Dart: The programming language used with Flutter.
+
+Provider: State management solution for Flutter.
+
+HTTP: For making network requests.
